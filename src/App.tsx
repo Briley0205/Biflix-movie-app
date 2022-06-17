@@ -7,10 +7,12 @@ import Search from "./Routes/Search";
 import Tv from "./Routes/Tv";
 
 /**Get some components */
+import Header from "./Routes/Components/Header";
 
 function App() {
   return (
     <Router>
+      <Header />
       <Switch>
         <Route path="/search">
           <Search />
