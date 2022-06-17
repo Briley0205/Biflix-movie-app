@@ -72,8 +72,8 @@ table {
 body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
-  color: ${(props) => props.theme.white.darker};
-  background-color: #141414;
+  color: white;
+  background-color: whitesmoke;
   line-height: 1.2;
 }
 a {

@@ -9,7 +9,8 @@ import { getMovies, IGetMoviesResult } from "../api";
 import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
-  background-color: #141414;
+  background-color: whitesmoke;
+  //background-color: #141414;
 `;
 
 function Home() {
