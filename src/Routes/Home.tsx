@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 
 function Home() {
   return (
-    <Wrapper>
+    <Wrapper style={{ height: "200vh" }}>
       <Helmet>
         <title>Home | BIFLIX</title>
         <link rel="icon" href="../image/Logo-piyo.svg" />

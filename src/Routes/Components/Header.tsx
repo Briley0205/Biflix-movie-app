@@ -10,8 +10,9 @@ import { MotionConfig } from "framer-motion";
 /**For motion animation */
 import { motion, useAnimation, useViewportScroll } from "framer-motion";
 import { isWhiteSpaceLike } from "typescript";
+import { useEffect, useState } from "react";
 
-const Nav = styled.nav`
+const Nav = styled(motion.nav)`
   height: 70px;
   position: fixed;
   width: 100%;
@@ -19,7 +20,6 @@ const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #141414;
   color: white;
   padding: 0 50px;
   font-size: 14px;
@@ -65,18 +65,62 @@ const NavUnderBar = styled(motion.span)`
 
 const Search = styled.span`
   color: white;
+  display: flex;
+  align-items: center;
+  position: relative;
   svg {
     height: 25px;
   }
 `;
-const Input = styled.input``;
+const Input = styled(motion.input)`
+  transform-origin: right center;
+  position: absolute;
+  right: 0;
+  padding: 5px 10px;
+  padding-left: 40px;
+  z-index: -1;
+  color: #fff;
+  font-size: 16px;
+  background-color: transparent;
+  border: 1px solid ${(props) => props.theme.white.lighter};
+`;
 
+const navVariants = {
+  top: { backgroundColor: "rgba(20, 20, 20, 0)" },
+  scroll: { backgroundColor: "rgba(20, 20, 20, 1)" },
+};
 function Header() {
   /**It wil tell if I am in the url */
   const homeMatch = useRouteMatch("/");
   const tvMatch = useRouteMatch("/tv");
+  /**useAnimation() hook triggers the animation in outer function */
+  const [searchOpen, setSearchOpen] = useState(false);
+  const inputAnimation = useAnimation();
+  const searchToggle = () => {
+    if (searchOpen) {
+      inputAnimation.start({
+        scaleX: 0,
+      });
+    } else {
+      inputAnimation.start({
+        scaleX: 1,
+      });
+    }
+    setSearchOpen((prev) => !prev);
+  };
+  const navAnimation = useAnimation();
+  const { scrollY } = useViewportScroll();
+  useEffect(() => {
+    scrollY.onChange(() => {
+      if (scrollY.get() > 80) {
+        navAnimation.start("scroll");
+      } else {
+        navAnimation.start("top");
+      }
+    });
+  }, [scrollY, navAnimation]);
   return (
-    <Nav>
+    <Nav variants={navVariants} animate={navAnimation} initial="top">
       <Col>
         <LogoBox>
           <PiyoSvg />
@@ -98,8 +142,16 @@ function Header() {
       </Col>
       <Col>
         <Search>
-          <Input />
+          <Input
+            animate={inputAnimation}
+            initial={{ scaleX: 0 }}
+            transition={{ type: "linear" }}
+            placeholder="Search for..."
+          />
           <motion.svg
+            onClick={searchToggle}
+            animate={{ x: searchOpen ? "-215px" : 0 }}
+            transition={{ type: "linear" }}
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
