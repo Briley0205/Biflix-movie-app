@@ -32,6 +32,17 @@ const Banner = styled.div<{ bgPhoto: string }>`
     url(${(props) => props.bgPhoto});
   background-size: cover;
 `;
+const TitleLayer = styled.div``;
+const TitleWrapper = styled.div``;
+const BillBoardTitle = styled.div`
+  min-height: 6.5vw;
+  max-width: 85%;
+  margin-bottom: 1.2vw;
+`;
+const InfoWrapper = styled.div``;
+const TitleButtonWrapper = styled.div``;
+const TitlePlayButton = styled.button``;
+const TitleInfoButton = styled.button``;
 
 function Home() {
   const { data, isLoading } = useQuery<IGetMoviesResult>(
@@ -48,9 +59,18 @@ function Home() {
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner
-            bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}
-          ></Banner>
+          <Banner bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
+            <TitleLayer>
+              <TitleWrapper>
+                <BillBoardTitle>{data?.results[0].title}</BillBoardTitle>
+              </TitleWrapper>
+              <InfoWrapper>{data?.results[0].overview}</InfoWrapper>
+              <TitleButtonWrapper>
+                <TitlePlayButton>Play</TitlePlayButton>
+                <TitleInfoButton>Info</TitleInfoButton>
+              </TitleButtonWrapper>
+            </TitleLayer>
+          </Banner>
         </>
       )}
     </Wrapper>
