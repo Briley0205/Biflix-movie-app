@@ -23,6 +23,7 @@ const Nav = styled(motion.nav)`
   color: white;
   padding: 0 50px;
   font-size: 14px;
+  z-index: 99;
 `;
 const Col = styled.div`
   display: flex;
@@ -112,7 +113,7 @@ function Header() {
   const { scrollY } = useViewportScroll();
   useEffect(() => {
     scrollY.onChange(() => {
-      if (scrollY.get() > 80) {
+      if (scrollY.get() > 60) {
         navAnimation.start("scroll");
       } else {
         navAnimation.start("top");
