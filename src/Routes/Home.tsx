@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import { getMovies, IGetMoviesResult } from "../api";
 import { makeImagePath } from "../utils";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const Wrapper = styled.div`
   background-color: #141414;
@@ -89,8 +90,25 @@ const ButtonIcon = styled.div`
 
 const Slider = styled.div`
   position: relative;
-  //top: -5%;
-  top: -150px;
+  top: -8%;
+  //top: -150px;
+  position: relative;
+  margin: 3vw 0;
+  padding: 0;
+`;
+const SliderTitle = styled.h2`
+  //margin-left: 4%;
+  line-height: 1.3;
+  font-size: 1.4vw;
+  font-weight: 700;
+  margin: 0 4% 0.5em 4%;
+  text-decoration: none;
+  display: inline-block;
+  min-width: 6em;
+  /* margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px; */
 `;
 const Row = styled(motion.div)`
   display: grid;
@@ -98,13 +116,12 @@ const Row = styled(motion.div)`
   margin-bottom: 5px;
   grid-template-columns: repeat(6, 1fr);
   position: absolute;
-  width: 100%;
+  padding: 0 4%;
+  //width: 100%;
 `;
 const MovieBox = styled(motion.div)`
-  background-size: cover;
-  background-position: center center;
-  //height: 200px;
-  font-size: 64px;
+  //font-size: 64px;
+  //border-radius: 3px;
   &:first-child {
     transform-origin: center left;
   }
@@ -114,14 +131,37 @@ const MovieBox = styled(motion.div)`
   //position: relative;
   img {
     width: 100%;
+    border-radius: 5px;
   }
 `;
+const ArrowBox = styled(motion.span)`
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 20;
+  width: 4%;
+  text-align: center;
+  display: flex;
+  color: #fff;
+  z-index: 11;
+  background-color: white;
+  //background: rgba(20, 20, 20, 0.5);
+  border-radius: 0 5px 5px 0;
+`;
+const RightArrow = styled(ArrowBox)`
+  right: 0;
+  border-radius: 5px 0 0 5px;
+`;
+
+const offset = 6;
 
 function Home() {
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
   );
+  const [index, setIndex] = useState(0);
   return (
     <Wrapper style={{ height: "200vh" }}>
       <Helmet>
@@ -155,12 +195,18 @@ function Home() {
             </TitleLayer>
           </Banner>
           <Slider>
+            <SliderTitle>Now Playing</SliderTitle>
             <Row>
-              {data?.results.map((movie) => (
-                <MovieBox key={movie.id}>
-                  <img src={makeImagePath(movie.poster_path, "w500")} />
-                </MovieBox>
-              ))}
+              <ArrowBox></ArrowBox>
+              {data?.results
+                .slice(1)
+                .slice(offset * index, offset * index + offset)
+                .map((movie) => (
+                  <MovieBox key={movie.id}>
+                    <img src={makeImagePath(movie.poster_path, "w500")} />
+                  </MovieBox>
+                ))}
+              <RightArrow></RightArrow>
             </Row>
           </Slider>
         </>
