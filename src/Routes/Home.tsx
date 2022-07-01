@@ -8,6 +8,7 @@ import { BsPlayFill, BsInfoCircle } from "react-icons/bs";
 import { useQuery } from "react-query";
 import { getMovies, IGetMoviesResult } from "../api";
 import { makeImagePath } from "../utils";
+import { motion } from "framer-motion";
 
 const Wrapper = styled.div`
   background-color: #141414;
@@ -86,6 +87,36 @@ const ButtonIcon = styled.div`
   align-items: center;
 `;
 
+const Slider = styled.div`
+  position: relative;
+  //top: -5%;
+  top: -150px;
+`;
+const Row = styled(motion.div)`
+  display: grid;
+  gap: 10px;
+  margin-bottom: 5px;
+  grid-template-columns: repeat(6, 1fr);
+  position: absolute;
+  width: 100%;
+`;
+const MovieBox = styled(motion.div)`
+  background-size: cover;
+  background-position: center center;
+  //height: 200px;
+  font-size: 64px;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
+  //position: relative;
+  img {
+    width: 100%;
+  }
+`;
+
 function Home() {
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
@@ -123,6 +154,15 @@ function Home() {
               </TitleButtonWrapper>
             </TitleLayer>
           </Banner>
+          <Slider>
+            <Row>
+              {data?.results.map((movie) => (
+                <MovieBox key={movie.id}>
+                  <img src={makeImagePath(movie.poster_path, "w500")} />
+                </MovieBox>
+              ))}
+            </Row>
+          </Slider>
         </>
       )}
     </Wrapper>

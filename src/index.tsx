@@ -68,6 +68,7 @@ table {
 }
 * {
   box-sizing: border-box;
+  caret-color: transparent;
 }
 body {
   font-weight: 300;
