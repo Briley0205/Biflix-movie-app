@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 /**For styled components */
 import styled from "styled-components";
 import { BsPlayFill, BsInfoCircle } from "react-icons/bs";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 /**To get movie data */
 import { useQuery } from "react-query";
@@ -143,10 +144,13 @@ const ArrowBox = styled(motion.span)`
   width: 4%;
   text-align: center;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  //font-size: 0.75vw;
+  line-height: 1;
   color: #fff;
   z-index: 11;
-  background-color: white;
-  //background: rgba(20, 20, 20, 0.5);
+  background: rgba(20, 20, 20, 0.5);
   border-radius: 0 5px 5px 0;
 `;
 const RightArrow = styled(ArrowBox)`
@@ -197,7 +201,9 @@ function Home() {
           <Slider>
             <SliderTitle>Now Playing</SliderTitle>
             <Row>
-              <ArrowBox></ArrowBox>
+              <ArrowBox>
+                <MdKeyboardArrowLeft size="1.8em" />
+              </ArrowBox>
               {data?.results
                 .slice(1)
                 .slice(offset * index, offset * index + offset)
@@ -206,7 +212,9 @@ function Home() {
                     <img src={makeImagePath(movie.poster_path, "w500")} />
                   </MovieBox>
                 ))}
-              <RightArrow></RightArrow>
+              <RightArrow>
+                <MdKeyboardArrowRight size="1.8em" />
+              </RightArrow>
             </Row>
           </Slider>
         </>
