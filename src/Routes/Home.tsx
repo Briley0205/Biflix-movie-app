@@ -166,6 +166,14 @@ function Home() {
     getMovies
   );
   const [index, setIndex] = useState(0);
+  const increaseIndex = () => {
+    if (data) {
+      const totalMovies = data.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+      console.log(index);
+    }
+  };
   return (
     <Wrapper style={{ height: "200vh" }}>
       <Helmet>
@@ -202,7 +210,7 @@ function Home() {
             <SliderTitle>Now Playing</SliderTitle>
             <Row>
               <ArrowBox>
-                <MdKeyboardArrowLeft size="1.8em" />
+                <MdKeyboardArrowLeft size="3vw" />
               </ArrowBox>
               {data?.results
                 .slice(1)
@@ -213,7 +221,7 @@ function Home() {
                   </MovieBox>
                 ))}
               <RightArrow>
-                <MdKeyboardArrowRight size="1.8em" />
+                <MdKeyboardArrowRight size="3vw" onClick={increaseIndex} />
               </RightArrow>
             </Row>
           </Slider>
