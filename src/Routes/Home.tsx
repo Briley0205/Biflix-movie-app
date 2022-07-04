@@ -143,6 +143,14 @@ const MovieBox = styled(motion.div)`
   img {
     width: 100%;
     border-radius: 5px;
+    transition-delay: 1s;
+    &:hover {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+  &:hover {
+    cursor: pointer;
   }
 `;
 const MovieBoxVariants = {
@@ -183,6 +191,33 @@ const RightArrow = styled(ArrowBox)`
   right: 0;
   border-radius: 5px 0 0 5px;
 `;
+
+const MovieBoxInfo = styled(motion.div)`
+  padding: 10px;
+  background-color: ${(props) => props.theme.black.lighter};
+  //position: absolute;
+  margin-top: -5px;
+  width: 100%;
+  bottom: 0;
+  opacity: 0;
+  //display: none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  h4 {
+    text-align: center;
+    font-size: 18px;
+  }
+`;
+const infoVariants = {
+  hover: {
+    opacity: 1,
+    transition: {
+      delay: 1,
+      duration: 0.3,
+      type: "tween",
+    },
+  },
+};
 
 const offset = 6;
 
@@ -260,6 +295,9 @@ function Home() {
                       key={movie.id}
                     >
                       <img src={makeImagePath(movie.poster_path, "w500")} />
+                      <MovieBoxInfo variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                      </MovieBoxInfo>
                     </MovieBox>
                   ))}
                 <RightArrow onClick={increaseIndex}>
