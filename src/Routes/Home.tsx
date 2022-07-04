@@ -9,7 +9,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useQuery } from "react-query";
 import { getMovies, IGetMoviesResult } from "../api";
 import { makeImagePath } from "../utils";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
 const Wrapper = styled.div`
@@ -93,7 +93,6 @@ const Slider = styled.div`
   position: relative;
   top: -8%;
   //top: -150px;
-  position: relative;
   margin: 3vw 0;
   padding: 0;
 `;
@@ -120,6 +119,17 @@ const Row = styled(motion.div)`
   padding: 0 4%;
   //width: 100%;
 `;
+const rowVariants = {
+  hidden: {
+    x: "100vw",
+  },
+  visible: {
+    x: 0,
+  },
+  exit: {
+    x: "-100vw",
+  },
+};
 const MovieBox = styled(motion.div)`
   //font-size: 64px;
   //border-radius: 3px;
@@ -135,6 +145,16 @@ const MovieBox = styled(motion.div)`
     border-radius: 5px;
   }
 `;
+const MovieBoxVariants = {
+  normal: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.3,
+    y: -50,
+    transition: { delay: 1, duration: 0.3, type: "tween" },
+  },
+};
 const ArrowBox = styled(motion.span)`
   cursor: pointer;
   position: absolute;
@@ -152,6 +172,12 @@ const ArrowBox = styled(motion.span)`
   z-index: 11;
   background: rgba(20, 20, 20, 0.5);
   border-radius: 0 5px 5px 0;
+  svg {
+    opacity: 0;
+  }
+  &:hover svg {
+    opacity: 1;
+  }
 `;
 const RightArrow = styled(ArrowBox)`
   right: 0;
@@ -208,22 +234,39 @@ function Home() {
           </Banner>
           <Slider>
             <SliderTitle>Now Playing</SliderTitle>
-            <Row>
-              <ArrowBox>
-                <MdKeyboardArrowLeft size="3vw" />
-              </ArrowBox>
-              {data?.results
-                .slice(1)
-                .slice(offset * index, offset * index + offset)
-                .map((movie) => (
-                  <MovieBox key={movie.id}>
-                    <img src={makeImagePath(movie.poster_path, "w500")} />
-                  </MovieBox>
-                ))}
-              <RightArrow>
-                <MdKeyboardArrowRight size="3vw" onClick={increaseIndex} />
-              </RightArrow>
-            </Row>
+            <AnimatePresence initial={false}>
+              <Row
+                variants={rowVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ type: "tween", duration: 1 }}
+                key={index}
+              >
+                {index === 0 ? null : (
+                  <ArrowBox>
+                    <MdKeyboardArrowLeft size="3vw" />
+                  </ArrowBox>
+                )}
+                {data?.results
+                  .slice(1)
+                  .slice(offset * index, offset * index + offset)
+                  .map((movie) => (
+                    <MovieBox
+                      variants={MovieBoxVariants}
+                      initial="normal"
+                      whileHover="hover"
+                      transition={{ type: "tween" }}
+                      key={movie.id}
+                    >
+                      <img src={makeImagePath(movie.poster_path, "w500")} />
+                    </MovieBox>
+                  ))}
+                <RightArrow onClick={increaseIndex}>
+                  <MdKeyboardArrowRight size="3vw" />
+                </RightArrow>
+              </Row>
+            </AnimatePresence>
           </Slider>
         </>
       )}
