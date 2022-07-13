@@ -7,7 +7,8 @@ import { makeImagePath } from "../../utils";
 
 const Slider = styled.div`
   position: relative;
-  top: -8%;
+  //top: -8%;
+  top: -15vw;
   margin: 3vw 0;
   height: 25vw;
   padding: 0;
