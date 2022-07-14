@@ -24,7 +24,7 @@ function App() {
         </Route>
       </Switch>
       <Switch>
-        <Route path="/">
+        <Route path={["/", "/movies/:movieId"]}>
           <Home />
         </Route>
       </Switch>

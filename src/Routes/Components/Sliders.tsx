@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { IMovie } from "../../api";
 import { makeImagePath } from "../../utils";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 const Slider = styled.div`
   position: relative;
@@ -142,6 +143,11 @@ const Sliders = ({ title, movies, query }: IData) => {
       console.log(index);
     }
   };
+  const history = useHistory();
+  const onBoxClicked = (movieId: number) => {
+    history.push(`/movies/${movieId}`);
+  };
+  const bigModalMatch = useRouteMatch("/movies/:movieId");
   return (
     <Slider>
       <SliderTitle>{title}</SliderTitle>
@@ -168,6 +174,8 @@ const Sliders = ({ title, movies, query }: IData) => {
                 initial="normal"
                 whileHover="hover"
                 transition={{ type: "tween" }}
+                onClick={() => onBoxClicked(movie.id)}
+                layoutId={movie.id + ""}
                 key={movie.id}
               >
                 <img src={makeImagePath(movie.poster_path, "w500")} />

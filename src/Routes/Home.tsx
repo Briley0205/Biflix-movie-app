@@ -13,6 +13,7 @@ import { useState } from "react";
 /**Components */
 import Banner from "./Components/Banner";
 import Sliders from "./Components/Sliders";
+import { useRouteMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
   background-color: #141414;
@@ -29,7 +30,7 @@ function Home() {
   const { data: nowPlayingData, isLoading: popularLoading } =
     useQuery<IGetMoviesResult>(["nowPlaying", "movie"], getNowPlayingMovies);
   console.log(nowPlayingData);
-
+  const bigModalMatch = useRouteMatch<{ movieId: string }>("/movies/:movieId");
   return (
     <Wrapper style={{ height: "200vh" }}>
       <Helmet>
@@ -46,6 +47,23 @@ function Home() {
             title="Now Playing"
             query="nowPlayingData"
           ></Sliders>
+          <AnimatePresence>
+            {bigModalMatch ? (
+              <motion.div
+                layoutId={bigModalMatch.params.movieId}
+                style={{
+                  position: "absolute",
+                  width: "40vw",
+                  height: "80vh",
+                  backgroundColor: "red",
+                  top: 50,
+                  left: 0,
+                  right: 0,
+                  margin: "0 auto",
+                }}
+              />
+            ) : null}
+          </AnimatePresence>
         </>
       )}
     </Wrapper>
