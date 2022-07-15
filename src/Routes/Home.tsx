@@ -25,6 +25,26 @@ const Loader = styled.div`
   justify-content: center;
   align-items: center;
 `;
+const ModalContainer = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 101;
+`;
+const ModalDialog = styled(motion.article)`
+  position: relative;
+  margin: 1.5rem auto;
+  max-width: 1080px;
+  width: 90%;
+  height: calc(100vh - 3rem);
+  border-radius: 10px;
+  background-color: ${(props) => props.theme.black.lighter};
+  overflow: auto;
+`;
 
 function Home() {
   const { data: nowPlayingData, isLoading: popularLoading } =
@@ -49,19 +69,9 @@ function Home() {
           ></Sliders>
           <AnimatePresence>
             {bigModalMatch ? (
-              <motion.div
-                layoutId={bigModalMatch.params.movieId}
-                style={{
-                  position: "absolute",
-                  width: "40vw",
-                  height: "80vh",
-                  backgroundColor: "red",
-                  top: 50,
-                  left: 0,
-                  right: 0,
-                  margin: "0 auto",
-                }}
-              />
+              <ModalContainer>
+                <ModalDialog layoutId={bigModalMatch.params.movieId} />
+              </ModalContainer>
             ) : null}
           </AnimatePresence>
         </>
