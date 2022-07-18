@@ -63,7 +63,7 @@ function Home() {
         <>
           <Banner movies={nowPlayingData?.results}></Banner>
           <Sliders
-            movies={nowPlayingData?.results}
+            movies={nowPlayingData?.results ?? []}
             title="Now Playing"
             query="nowPlayingData"
           ></Sliders>

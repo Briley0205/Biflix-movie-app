@@ -32,15 +32,15 @@ const Row = styled(motion.div)`
   padding: 0 4%;
 `;
 const rowVariants = {
-  hidden: {
-    x: "100vw",
-  },
+  hidden: ({ prev }: { prev: boolean }) => ({
+    x: prev ? "-100vw" : "100vw",
+  }),
   visible: {
     x: 0,
   },
-  exit: {
-    x: "-100vw",
-  },
+  exit: ({ prev }: { prev: boolean }) => ({
+    x: prev ? "100vw" : "-100vw",
+  }),
 };
 const MovieBox = styled(motion.div)`
   &:first-child {
@@ -130,19 +130,37 @@ const offset = 6;
 interface IData {
   title: string;
   query: string;
-  movies?: IMovie[];
+  movies: IMovie[];
 }
 
 const Sliders = ({ title, movies, query }: IData) => {
   const [index, setIndex] = useState(0);
+  const [sliderMoving, setSliderMoving] = useState(false);
+  const [sliderMovingPrev, setSliderMovingPrev] = useState(false);
+
+  const totalMovies = movies?.length - 1;
+  const maxIndex = Math.floor(totalMovies / offset) - 1;
   const increaseIndex = () => {
-    if (movies) {
-      const totalMovies = movies?.length - 1;
-      const maxIndex = Math.floor(totalMovies / offset) - 1;
+    if (!sliderMoving && movies) {
+      setSliderMoving(true);
+      setSliderMovingPrev(false);
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
       console.log(index);
     }
   };
+  const decreaseIndex = () => {
+    if (!sliderMoving && movies) {
+      setSliderMovingPrev(true);
+      setSliderMoving(true);
+      setIndex((prev) => (prev === maxIndex ? prev - 1 : 0));
+      console.log(index);
+    }
+  };
+  const onExitCompleteSlider = () => {
+    setSliderMoving(false);
+    setSliderMovingPrev(false);
+  };
+
   const history = useHistory();
   const onBoxClicked = (movieId: number) => {
     history.push(`/movies/${movieId}`);
@@ -151,20 +169,25 @@ const Sliders = ({ title, movies, query }: IData) => {
   return (
     <Slider>
       <SliderTitle>{title}</SliderTitle>
-      <AnimatePresence initial={false}>
+      {index === 0 ? null : (
+        <ArrowBox onClick={decreaseIndex}>
+          <MdKeyboardArrowLeft size="3vw" />
+        </ArrowBox>
+      )}
+      <AnimatePresence
+        custom={{ prev: sliderMovingPrev }}
+        initial={false}
+        onExitComplete={onExitCompleteSlider}
+      >
         <Row
           variants={rowVariants}
           initial="hidden"
           animate="visible"
           exit="exit"
+          custom={{ prev: sliderMovingPrev }}
           transition={{ type: "tween", duration: 1 }}
           key={index}
         >
-          {index === 0 ? null : (
-            <ArrowBox>
-              <MdKeyboardArrowLeft size="3vw" />
-            </ArrowBox>
-          )}
           {movies
             ?.slice(1)
             .slice(offset * index, offset * index + offset)
@@ -184,11 +207,11 @@ const Sliders = ({ title, movies, query }: IData) => {
                 </MovieBoxInfo>
               </MovieBox>
             ))}
-          <RightArrow onClick={increaseIndex}>
-            <MdKeyboardArrowRight size="3vw" />
-          </RightArrow>
         </Row>
       </AnimatePresence>
+      <RightArrow onClick={increaseIndex}>
+        <MdKeyboardArrowRight size="3vw" />
+      </RightArrow>
     </Slider>
   );
 };
