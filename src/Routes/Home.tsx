@@ -13,7 +13,7 @@ import { useState } from "react";
 /**Components */
 import Banner from "./Components/Banner";
 import Sliders from "./Components/Sliders";
-import { useRouteMatch } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
   background-color: #141414;
@@ -44,6 +44,16 @@ const ModalDialog = styled(motion.article)`
   border-radius: 10px;
   background-color: ${(props) => props.theme.black.lighter};
   overflow: auto;
+  z-index: 103;
+`;
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  z-index: 102;
 `;
 
 function Home() {
@@ -51,6 +61,11 @@ function Home() {
     useQuery<IGetMoviesResult>(["nowPlaying", "movie"], getNowPlayingMovies);
   console.log(nowPlayingData);
   const bigModalMatch = useRouteMatch<{ movieId: string }>("/movies/:movieId");
+  const history = useHistory();
+  const onModalClose = () => {
+    console.log("you clicked it");
+    history.push("/");
+  };
   return (
     <Wrapper style={{ height: "200vh" }}>
       <Helmet>
@@ -69,9 +84,16 @@ function Home() {
           ></Sliders>
           <AnimatePresence>
             {bigModalMatch ? (
-              <ModalContainer>
-                <ModalDialog layoutId={bigModalMatch.params.movieId} />
-              </ModalContainer>
+              <>
+                <Overlay
+                  onClick={onModalClose}
+                  exit={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                />
+                <ModalContainer>
+                  <ModalDialog layoutId={bigModalMatch.params.movieId} />
+                </ModalContainer>
+              </>
             ) : null}
           </AnimatePresence>
         </>
