@@ -5,15 +5,29 @@ import styled from "styled-components";
 
 /**To get movie data */
 import { useQuery } from "react-query";
-import { getNowPlayingMovies, IGetMoviesResult } from "../api";
+import {
+  getNowPlayingMovies,
+  IGetMoviesResult,
+  getMovieDetail,
+  IMovie,
+} from "../api";
 import { makeImagePath } from "../utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 /**Components */
 import Banner from "./Components/Banner";
 import Sliders from "./Components/Sliders";
+import TrailerVideo from "./Components/Trailer";
+
 import { useHistory, useRouteMatch } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { modalState } from "../atom";
+
+interface MovieDetailState {
+  movie?: IMovie;
+  layoutId: string;
+}
 
 const Wrapper = styled.div`
   background-color: #141414;
@@ -33,16 +47,19 @@ const ModalContainer = styled(motion.div)`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 101;
+  z-index: 100;
 `;
 const ModalDialog = styled(motion.article)`
   position: relative;
   margin: 1.5rem auto;
-  max-width: 1080px;
-  width: 90%;
+  //max-width: 1080px;
+  max-width: 901.26px;
+  //width: 90%;
+  width: 100%;
   height: calc(100vh - 3rem);
+  box-shadow: rgb(0 0 0 / 75%) 0px 3px 10px;
   border-radius: 10px;
-  background-color: ${(props) => props.theme.black.lighter};
+  background-color: ${(props) => props.theme.black.darker};
   overflow: auto;
   z-index: 103;
 `;
@@ -51,23 +68,40 @@ const Overlay = styled(motion.div)`
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   opacity: 0;
-  z-index: 102;
+  z-index: 100;
 `;
 
 function Home() {
+  const part = "movie";
+  const bigModalMatch = useRouteMatch<{ movieId: string }>("/movies/:movieId");
   const { data: nowPlayingData, isLoading: popularLoading } =
     useQuery<IGetMoviesResult>(["nowPlaying", "movie"], getNowPlayingMovies);
-  console.log(nowPlayingData);
-  const bigModalMatch = useRouteMatch<{ movieId: string }>("/movies/:movieId");
+  const { data: movieDetail } = useQuery(
+    ["movie", bigModalMatch?.params.movieId],
+    () => getMovieDetail(bigModalMatch?.params.movieId || ""),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+  //console.log(movieDetail);
+
+  const [isModalActive, setIsActive] = useRecoilState(modalState);
+
   const history = useHistory();
   const onModalClose = () => {
-    console.log("you clicked it");
+    setIsActive(false);
+    console.log(isModalActive);
     history.push("/");
   };
+
   return (
-    <Wrapper style={{ height: "200vh" }}>
+    <Wrapper
+      style={{
+        height: "200vh",
+      }}
+    >
       <Helmet>
         <title>Home | BIFLIX</title>
         <link rel="icon" href="../image/Logo-piyo.svg" />
@@ -78,20 +112,25 @@ function Home() {
         <>
           <Banner movies={nowPlayingData?.results}></Banner>
           <Sliders
+            id="nowplayingmovies"
             movies={nowPlayingData?.results ?? []}
             title="Now Playing"
             query="nowPlayingData"
+            part={part}
           ></Sliders>
           <AnimatePresence>
             {bigModalMatch ? (
               <>
-                <Overlay
-                  onClick={onModalClose}
-                  exit={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                />
+                <Overlay exit={{ opacity: 0 }} animate={{ opacity: 1 }} />
                 <ModalContainer>
-                  <ModalDialog layoutId={bigModalMatch.params.movieId} />
+                  <ModalDialog
+                    layoutId={bigModalMatch.params.movieId}
+                    onClick={onModalClose}
+                  >
+                    <div className="video">
+                      <TrailerVideo id={bigModalMatch.params.movieId} />
+                    </div>
+                  </ModalDialog>
                 </ModalContainer>
               </>
             ) : null}

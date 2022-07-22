@@ -8,8 +8,17 @@ import Tv from "./Routes/Tv";
 
 /**Get some components */
 import Header from "./Routes/Components/Header";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { modalState } from "./atom";
 
 function App() {
+  const [isModalActive, setIsActive] = useRecoilState(modalState);
+  useEffect(() => {
+    isModalActive
+      ? (document.body.style.overflowY = "hidden")
+      : (document.body.style.overflowY = "scroll");
+  }, [isModalActive]);
   return (
     <Router>
       <Header />

@@ -11,6 +11,9 @@ export interface IMovie {
   overview: string;
   video: boolean;
   vote_average: number;
+  popularity: number;
+  vote_count: number;
+  is_tv?: boolean;
 }
 
 export interface IGetMoviesResult {
@@ -42,8 +45,14 @@ export function findTvShows(keyword: string | null) {
   ).then((response) => response.json());
 }
 
-export async function getVideos(id?: number, part?: string) {
+export async function getMovieDetail(id?: string) {
+  return fetch(`${BASE_PATH}/movie/${id}?api_key=${API_KEY}`).then((response) =>
+    response.json()
+  );
+}
+
+export async function getMovieTrailer(id?: string) {
   return await (
-    await fetch(`${BASE_PATH}/${part}/${id}/videos?api_key=${API_KEY}`)
+    await fetch(`${BASE_PATH}/movie/${id}/videos?api_key=${API_KEY}`)
   ).json();
 }

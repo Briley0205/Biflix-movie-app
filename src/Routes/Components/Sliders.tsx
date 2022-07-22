@@ -4,7 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { IMovie } from "../../api";
 import { makeImagePath } from "../../utils";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { modalState } from "../../atom";
 
 const Slider = styled.div`
   position: relative;
@@ -128,12 +130,14 @@ const infoVariants = {
 const offset = 6;
 
 interface IData {
+  id: string;
   title: string;
   query: string;
   movies: IMovie[];
+  part: string;
 }
 
-const Sliders = ({ title, movies, query }: IData) => {
+const Sliders = ({ id, title, movies, query, part }: IData) => {
   const [index, setIndex] = useState(0);
   const [sliderMoving, setSliderMoving] = useState(false);
   const [sliderMovingPrev, setSliderMovingPrev] = useState(false);
@@ -160,12 +164,13 @@ const Sliders = ({ title, movies, query }: IData) => {
     setSliderMoving(false);
     setSliderMovingPrev(false);
   };
-
+  const [isModalActive, setIsActive] = useRecoilState(modalState);
   const history = useHistory();
   const onBoxClicked = (movieId: number) => {
+    setIsActive(true);
+    console.log(isModalActive);
     history.push(`/movies/${movieId}`);
   };
-  const bigModalMatch = useRouteMatch("/movies/:movieId");
   return (
     <Slider>
       <SliderTitle>{title}</SliderTitle>
