@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { getMovieTrailer } from "../../api";
 
 const Wrapper = styled.div`
-  position: absolute;
+  position: relative;
   width: 100%;
   height: calc((100vh - 48px) * (3 / 5));
   object-fit: contain;
@@ -12,6 +12,14 @@ const Wrapper = styled.div`
     width: 100%;
     height: 100%;
   }
+`;
+const ModalTitleWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(0deg, #181818, transparent 50%);
 `;
 
 interface IGetTrailer {
@@ -54,6 +62,7 @@ const TrailerVideo = ({ id }: IGetTrailer) => {
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           ></iframe>
+          <ModalTitleWrapper />
         </Wrapper>
       ) : null}
     </>

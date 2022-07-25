@@ -1,12 +1,15 @@
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { BsInfoCircle, BsPlayFill } from "react-icons/bs";
+import { useHistory } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { IMovie } from "../../api";
+import { modalState } from "../../atom";
 import { makeImagePath } from "../../utils";
 
 const Mainhome = styled.div<{ bgPhoto: string }>`
   height: 56.25vw;
-  background-color: aliceblue;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,7 +42,7 @@ const InfoWrapper = styled.div`
 const TitleButtonWrapper = styled.div`
   display: flex;
 `;
-const TitlePlayButton = styled.button`
+const TitlePlayButton = styled(motion.button)`
   -webkit-box-align: center;
   align-items: center;
   appearance: none;
@@ -80,6 +83,12 @@ const Banner = ({ movies }: IBanner) => {
   useEffect(() => {
     if (movies) setMovie(movies[0]);
   }, [movies]);
+  const [isModalActive, setIsActive] = useRecoilState(modalState);
+  const history = useHistory();
+  const onBoxClicked = (movieId: number) => {
+    setIsActive(true);
+    history.push(`/movies/${movieId}`);
+  };
   return (
     <>
       {movie ? (
@@ -90,13 +99,13 @@ const Banner = ({ movies }: IBanner) => {
             </TitleWrapper>
             <InfoWrapper>{movie?.overview}</InfoWrapper>
             <TitleButtonWrapper>
-              <TitlePlayButton>
+              <TitlePlayButton onClick={() => onBoxClicked(movie.id)}>
                 <ButtonIcon>
                   <BsPlayFill size="2vw" />
                 </ButtonIcon>
                 <span>Play</span>
               </TitlePlayButton>
-              <TitleInfoButton>
+              <TitleInfoButton onClick={() => onBoxClicked(movie.id)}>
                 <ButtonIcon>
                   <BsInfoCircle size="1.5vw" />
                 </ButtonIcon>

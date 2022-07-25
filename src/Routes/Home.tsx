@@ -11,9 +11,7 @@ import {
   getMovieDetail,
   IMovie,
 } from "../api";
-import { makeImagePath } from "../utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useState } from "react";
 
 /**Components */
 import Banner from "./Components/Banner";
@@ -23,6 +21,7 @@ import TrailerVideo from "./Components/Trailer";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
+import { MdClose } from "react-icons/md";
 
 interface MovieDetailState {
   movie?: IMovie;
@@ -52,9 +51,7 @@ const ModalContainer = styled(motion.div)`
 const ModalDialog = styled(motion.article)`
   position: relative;
   margin: 1.5rem auto;
-  //max-width: 1080px;
   max-width: 901.26px;
-  //width: 90%;
   width: 100%;
   height: calc(100vh - 3rem);
   box-shadow: rgb(0 0 0 / 75%) 0px 3px 10px;
@@ -62,6 +59,9 @@ const ModalDialog = styled(motion.article)`
   background-color: ${(props) => props.theme.black.darker};
   overflow: auto;
   z-index: 103;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -71,6 +71,30 @@ const Overlay = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.7);
   opacity: 0;
   z-index: 100;
+`;
+const CloseButton = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1em;
+  width: 36px;
+  height: 36px;
+  background-color: ${(props) => props.theme.black.darker};
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  &:focus {
+    outline-color: #fff;
+  }
+`;
+
+const DetailModal = styled.div`
+  width: 100%;
+  height: 200vh;
+  padding: 0 3em;
 `;
 
 function Home() {
@@ -92,7 +116,6 @@ function Home() {
   const history = useHistory();
   const onModalClose = () => {
     setIsActive(false);
-    console.log(isModalActive);
     history.push("/");
   };
 
@@ -123,13 +146,14 @@ function Home() {
               <>
                 <Overlay exit={{ opacity: 0 }} animate={{ opacity: 1 }} />
                 <ModalContainer>
-                  <ModalDialog
-                    layoutId={bigModalMatch.params.movieId}
-                    onClick={onModalClose}
-                  >
+                  <ModalDialog layoutId={bigModalMatch.params.movieId}>
                     <div className="video">
                       <TrailerVideo id={bigModalMatch.params.movieId} />
                     </div>
+                    <CloseButton onClick={onModalClose}>
+                      <MdClose size="28px" />
+                    </CloseButton>
+                    <DetailModal></DetailModal>
                   </ModalDialog>
                 </ModalContainer>
               </>

@@ -10,7 +10,6 @@ import { modalState } from "../../atom";
 
 const Slider = styled.div`
   position: relative;
-  //top: -8%;
   top: -15vw;
   margin: 3vw 0;
   height: 25vw;
@@ -168,7 +167,6 @@ const Sliders = ({ id, title, movies, query, part }: IData) => {
   const history = useHistory();
   const onBoxClicked = (movieId: number) => {
     setIsActive(true);
-    console.log(isModalActive);
     history.push(`/movies/${movieId}`);
   };
   return (
