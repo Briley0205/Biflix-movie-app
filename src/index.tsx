@@ -50,6 +50,7 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
+  word-break: keep-all;
 }
 menu, ol, ul {
   list-style: none;

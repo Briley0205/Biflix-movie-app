@@ -50,6 +50,11 @@ export async function getMovieDetail(id?: string) {
     response.json()
   );
 }
+export async function getClipDetails(id?: string) {
+  return await fetch(`${BASE_PATH}/movie/${id}/videos?api_key=${API_KEY}`).then(
+    (response) => response.json()
+  );
+}
 
 export async function getMovieTrailer(id?: string) {
   return await (

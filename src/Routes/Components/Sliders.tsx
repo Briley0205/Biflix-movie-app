@@ -166,8 +166,8 @@ const Sliders = ({ id, title, movies, query, part }: IData) => {
   const [isModalActive, setIsActive] = useRecoilState(modalState);
   const history = useHistory();
   const onBoxClicked = (movieId: number) => {
-    setIsActive(true);
     history.push(`/movies/${movieId}`);
+    setIsActive(true);
   };
   return (
     <Slider>

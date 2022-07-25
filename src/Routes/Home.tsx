@@ -10,6 +10,7 @@ import {
   IGetMoviesResult,
   getMovieDetail,
   IMovie,
+  getClipDetails,
 } from "../api";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -22,11 +23,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
 import { MdClose } from "react-icons/md";
-
-interface MovieDetailState {
-  movie?: IMovie;
-  layoutId: string;
-}
+import { getYoutubeTumbnail } from "../utils";
 
 const Wrapper = styled.div`
   background-color: #141414;
@@ -69,7 +66,6 @@ const Overlay = styled(motion.div)`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  opacity: 0;
   z-index: 100;
 `;
 const CloseButton = styled.div`
@@ -96,6 +92,37 @@ const DetailModal = styled.div`
   height: 200vh;
   padding: 0 3em;
 `;
+const PrevModalTags = styled.div`
+  font-size: 14px;
+  line-height: 20px;
+  margin-top: 0.5em;
+  word-break: break-word;
+  .tags-label {
+    color: #777;
+    margin-right: 0.5em;
+  }
+`;
+const ClipsHeader = styled.h3`
+  font-size: 21px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  margin-top: 48px;
+`;
+const ClipsSelector = styled.div``;
+const TitleCardList = styled.div``;
+const TitleCardIndex = styled.div``;
+const TitleCardImage = styled.div<{ coverImage?: string }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 16px;
+  flex: none;
+  width: 133px;
+  height: 100px;
+  background-image: url(${(props) => props.coverImage});
+  background-size: cover;
+`;
+const TitleCardMeta = styled.div``;
 
 function Home() {
   const part = "movie";
@@ -104,12 +131,14 @@ function Home() {
     useQuery<IGetMoviesResult>(["nowPlaying", "movie"], getNowPlayingMovies);
   const { data: movieDetail } = useQuery(
     ["movie", bigModalMatch?.params.movieId],
-    () => getMovieDetail(bigModalMatch?.params.movieId || ""),
-    {
-      refetchOnWindowFocus: false,
-    }
+    () => getMovieDetail(bigModalMatch?.params.movieId || "")
   );
   //console.log(movieDetail);
+  const { data: movieClips, isLoading: detailLoading } = useQuery(
+    ["clips", bigModalMatch?.params.movieId],
+    () => getClipDetails(bigModalMatch?.params.movieId || "")
+  );
+  console.log(movieClips);
 
   const [isModalActive, setIsActive] = useRecoilState(modalState);
 
@@ -118,6 +147,7 @@ function Home() {
     setIsActive(false);
     history.push("/");
   };
+  const clips = movieClips?.results?.slice().reverse();
 
   return (
     <Wrapper
@@ -144,7 +174,12 @@ function Home() {
           <AnimatePresence>
             {bigModalMatch ? (
               <>
-                <Overlay exit={{ opacity: 0 }} animate={{ opacity: 1 }} />
+                <Overlay
+                  exit={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0 }}
+                  transition={{ type: "tween", duration: 0.3 }}
+                />
                 <ModalContainer>
                   <ModalDialog layoutId={bigModalMatch.params.movieId}>
                     <div className="video">
@@ -153,7 +188,137 @@ function Home() {
                     <CloseButton onClick={onModalClose}>
                       <MdClose size="28px" />
                     </CloseButton>
-                    <DetailModal></DetailModal>
+                    {detailLoading ? null : (
+                      <>
+                        <DetailModal>
+                          <section
+                            className="ptrack-container"
+                            style={{
+                              width: "100%",
+                              display: "grid",
+                              gridTemplateColumns:
+                                "minmax(0,2fr) minmax(0,1fr)",
+                              columnGap: "2em",
+                            }}
+                          >
+                            <div className="ptrack-container--detailsLeft">
+                              <div
+                                className="detailsMetaData"
+                                style={{
+                                  margin: "0.8em 0",
+                                  color: "white",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  flexWrap: "wrap",
+                                  fontSize: "15px",
+                                  fontWeight: "500",
+                                }}
+                              >
+                                {" "}
+                                <div
+                                  className="realeaseDate"
+                                  style={{
+                                    marginRight: "0.5em",
+                                    fontWeight: "600",
+                                    color: "#46d369",
+                                  }}
+                                >
+                                  {movieDetail?.release_date}
+                                </div>
+                                <div
+                                  className="runTime"
+                                  style={{ marginRight: "0.5em" }}
+                                >
+                                  {movieDetail?.runtime ?? null} minutes
+                                </div>
+                                <span
+                                  className="player-feature-badge"
+                                  style={{
+                                    border: "1px solid hsla(0, 0%, 100%, .4)",
+                                    borderRadius: "3px",
+                                    fontSize: ".7em",
+                                    padding: "0.05em 0.5em",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  HD
+                                </span>
+                              </div>
+                              <p
+                                className="preview-modal-synopsis"
+                                style={{
+                                  fontSize: "15px",
+                                  lineHeight: "24px",
+                                  marginTop: "1em",
+                                  marginBottom: "0.5em",
+                                }}
+                              >
+                                {movieDetail?.overview}
+                              </p>
+                            </div>
+                            <div
+                              className="ptrack-container--detailsRight"
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <PrevModalTags>
+                                <span className="tags-label">tag:</span>
+                                {movieDetail?.tagline}
+                              </PrevModalTags>
+                              <PrevModalTags>
+                                <span className="tags-label">title:</span>
+                                {movieDetail?.title}
+                              </PrevModalTags>
+                              <PrevModalTags>
+                                <span className="tags-label">genres:</span>
+                                {movieDetail?.genres?.length ? (
+                                  <>
+                                    <span>
+                                      {(movieDetail.genres || [])
+                                        .map((genre: any) => genre.name)
+                                        .join(", ")}
+                                    </span>
+                                  </>
+                                ) : null}
+                              </PrevModalTags>
+                              <PrevModalTags>
+                                <span className="tags-label">rating:</span>
+                                {movieDetail?.vote_average}
+                              </PrevModalTags>
+                            </div>
+                          </section>
+                          {movieClips.length ? null : (
+                            <section className="ptrack-container">
+                              <div
+                                className="episode-selector"
+                                style={{ padding: "1em 0 0" }}
+                              >
+                                <div className="episodeSelector-header">
+                                  <ClipsHeader>CLIPS</ClipsHeader>
+                                </div>
+                                <ClipsSelector>
+                                  {clips.map((clip: any, index: any) => (
+                                    <TitleCardList key={clip.key}>
+                                      <TitleCardIndex>
+                                        {index + 1}
+                                      </TitleCardIndex>
+                                      <TitleCardImage
+                                        coverImage={getYoutubeTumbnail(
+                                          clip.key
+                                        )}
+                                      ></TitleCardImage>
+                                      <TitleCardMeta></TitleCardMeta>
+                                    </TitleCardList>
+                                  ))}
+                                </ClipsSelector>
+                              </div>
+                            </section>
+                          )}
+                        </DetailModal>
+                      </>
+                    )}
                   </ModalDialog>
                 </ModalContainer>
               </>
