@@ -5,7 +5,7 @@ import { getMovieTrailer } from "../../api";
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
-  height: calc((100vh - 48px) * (3 / 5));
+  height: calc((100vh - 48px) * (4 / 5));
   object-fit: contain;
   iframe {
     position: relative;
