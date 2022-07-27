@@ -2,11 +2,11 @@ import { useState } from "react";
 import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { IMovie } from "../../api";
-import { makeImagePath } from "../../utils";
+import { IMovie } from "../api";
+import { makeImagePath } from "../utils";
 import { useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../atom";
+import { modalState } from "../atom";
 
 const Slider = styled.div`
   position: relative;

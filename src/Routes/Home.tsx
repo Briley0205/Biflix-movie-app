@@ -11,19 +11,25 @@ import {
   getMovieDetail,
   IMovie,
   getClipDetails,
+  getMovieRecommend,
 } from "../api";
 import { AnimatePresence, motion } from "framer-motion";
 
 /**Components */
-import Banner from "./Components/Banner";
-import Sliders from "./Components/Sliders";
-import TrailerVideo from "./Components/Trailer";
+import Banner from "../Components/Banner";
+import Sliders from "../Components/Sliders";
+import TrailerVideo from "../Components/Trailer";
 
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
 import { MdClose } from "react-icons/md";
-import { getYoutubeTumbnail } from "../utils";
+import { MdPlayArrow } from "react-icons/md";
+import {
+  getYoutubeTumbnail,
+  getYoutubeVideoUrl,
+  makeImagePath,
+} from "../utils";
 
 const Wrapper = styled.div`
   background-color: #141414;
@@ -89,7 +95,7 @@ const CloseButton = styled.div`
 
 const DetailModal = styled.div`
   width: 100%;
-  height: 200vh;
+  //height: 200vh;
   padding: 0 3em;
 `;
 const PrevModalTags = styled.div`
@@ -102,16 +108,59 @@ const PrevModalTags = styled.div`
     margin-right: 0.5em;
   }
 `;
-const ClipsHeader = styled.h3`
+const ModalTitle = styled.h3`
   font-size: 21px;
   font-weight: 600;
   margin-bottom: 20px;
   margin-top: 48px;
 `;
-const ClipsSelector = styled.div``;
-const TitleCardList = styled.div``;
-const TitleCardIndex = styled.div``;
+
+const ClipPlayIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #fff;
+  border-radius: 24px;
+  color: #fff;
+  background-color: rgba(30, 30, 20, 0.66);
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+`;
+
+const ClipsSelector = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+`;
+
+const TitleCardList = styled.a`
+  position: relative;
+  align-items: center;
+  border-bottom: 1px solid #404040;
+  border-radius: 0.25em;
+  display: flex;
+  overflow: hidden;
+  padding: 1em;
+  cursor: pointer;
+  &:hover {
+    background-color: #333;
+    ${ClipPlayIcon} {
+      opacity: 1;
+    }
+  }
+`;
+const TitleCardIndex = styled.div`
+  color: #d2d2d2;
+  display: flex;
+  flex: 0 0 5%;
+  font-size: 1.3em;
+  justify-content: center;
+`;
 const TitleCardImage = styled.div<{ coverImage?: string }>`
+  border-radius: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -122,23 +171,50 @@ const TitleCardImage = styled.div<{ coverImage?: string }>`
   background-image: url(${(props) => props.coverImage});
   background-size: cover;
 `;
-const TitleCardMeta = styled.div``;
+const TitleCardMeta = styled.div`
+  height: 45px;
+  font-size: 0.95em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  p {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+  span {
+    color: #d2d2d2;
+    font-size: 14px;
+  }
+`;
+
+const recommendBoxes = styled.div`
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1em;
+  align-items: stretch;
+  display: grid;
+  justify-items: stretch;
+`;
+const recommendCard = styled.div``;
 
 function Home() {
   const part = "movie";
   const bigModalMatch = useRouteMatch<{ movieId: string }>("/movies/:movieId");
+  const movieId = bigModalMatch?.params.movieId;
+
   const { data: nowPlayingData, isLoading: popularLoading } =
     useQuery<IGetMoviesResult>(["nowPlaying", "movie"], getNowPlayingMovies);
-  const { data: movieDetail } = useQuery(
-    ["movie", bigModalMatch?.params.movieId],
-    () => getMovieDetail(bigModalMatch?.params.movieId || "")
+  const { data: movieDetail } = useQuery(["movie", movieId], () =>
+    getMovieDetail(movieId || "")
   );
-  //console.log(movieDetail);
   const { data: movieClips, isLoading: detailLoading } = useQuery(
-    ["clips", bigModalMatch?.params.movieId],
-    () => getClipDetails(bigModalMatch?.params.movieId || "")
+    ["clips", movieId],
+    () => getClipDetails(movieId || "")
   );
-  console.log(movieClips);
+  const { data: movieRecomendations, isLoading: recommendationLoading } =
+    useQuery(["movieRecommend", movieId], () =>
+      getMovieRecommend(movieId || "")
+    );
+  console.log(movieRecomendations);
 
   const [isModalActive, setIsActive] = useRecoilState(modalState);
 
@@ -147,7 +223,7 @@ function Home() {
     setIsActive(false);
     history.push("/");
   };
-  const clips = movieClips?.results?.slice().reverse();
+  const clips = movieClips?.results?.reverse().slice(0, 3);
 
   return (
     <Wrapper
@@ -296,11 +372,14 @@ function Home() {
                                 style={{ padding: "1em 0 0" }}
                               >
                                 <div className="episodeSelector-header">
-                                  <ClipsHeader>CLIPS</ClipsHeader>
+                                  <ModalTitle>CLIPS</ModalTitle>
                                 </div>
                                 <ClipsSelector>
                                   {clips.map((clip: any, index: any) => (
-                                    <TitleCardList key={clip.key}>
+                                    <TitleCardList
+                                      key={clip.key}
+                                      href={getYoutubeVideoUrl(clip.key)}
+                                    >
                                       <TitleCardIndex>
                                         {index + 1}
                                       </TitleCardIndex>
@@ -308,13 +387,69 @@ function Home() {
                                         coverImage={getYoutubeTumbnail(
                                           clip.key
                                         )}
-                                      ></TitleCardImage>
-                                      <TitleCardMeta></TitleCardMeta>
+                                      >
+                                        <ClipPlayIcon>
+                                          <MdPlayArrow size={48} />
+                                        </ClipPlayIcon>
+                                      </TitleCardImage>
+                                      <TitleCardMeta>
+                                        <p>{clip.name}</p>
+
+                                        <span>
+                                          {new Date(
+                                            clip.published_at
+                                          ).toLocaleDateString()}
+                                        </span>
+                                      </TitleCardMeta>
                                     </TitleCardList>
                                   ))}
                                 </ClipsSelector>
                               </div>
                             </section>
+                          )}
+                          {recommendationLoading ? null : (
+                            <>
+                              <section className="ptrack-container">
+                                <div className="moreLikeThis--wrapper">
+                                  <ModalTitle>More like contents</ModalTitle>
+                                  <div className="recommendationsBody">
+                                    <div
+                                      style={{
+                                        gridTemplateColumns: "repeat(4, 1fr)",
+                                        gridGap: "1em",
+                                        alignItems: "stretch",
+                                        display: "grid",
+                                        justifyItems: "stretch",
+                                      }}
+                                    >
+                                      {movieRecomendations?.results?.map(
+                                        (recomend: any) => (
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              flexDirection: "column",
+                                              alignItems: "center",
+                                            }}
+                                          >
+                                            <img
+                                              src={makeImagePath(
+                                                recomend.poster_path,
+                                                "w500"
+                                              )}
+                                              style={{
+                                                width: "100%",
+                                                borderRadius: "5px",
+                                              }}
+                                            />
+                                            <h4>{recomend.title}</h4>
+                                          </div>
+                                        )
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </section>
+                            </>
                           )}
                         </DetailModal>
                       </>

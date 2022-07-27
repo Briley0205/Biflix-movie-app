@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 /**Import Logo svg */
-import { ReactComponent as PiyoSvg } from "../../Image/Logo-piyo.svg";
+import { ReactComponent as PiyoSvg } from "../Image/Logo-piyo.svg";
 
 /**To Route Link */
 import { Link, useRouteMatch } from "react-router-dom";

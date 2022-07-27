@@ -7,7 +7,7 @@ import Search from "./Routes/Search";
 import Tv from "./Routes/Tv";
 
 /**Get some components */
-import Header from "./Routes/Components/Header";
+import Header from "./Components/Header";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { modalState } from "./atom";

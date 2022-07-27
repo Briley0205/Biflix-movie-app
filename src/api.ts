@@ -61,3 +61,8 @@ export async function getMovieTrailer(id?: string) {
     await fetch(`${BASE_PATH}/movie/${id}/videos?api_key=${API_KEY}`)
   ).json();
 }
+export async function getMovieRecommend(id?: string) {
+  return await fetch(
+    `${BASE_PATH}/movie/${id}/recommendations?api_key=${API_KEY}`
+  ).then((response) => response.json());
+}

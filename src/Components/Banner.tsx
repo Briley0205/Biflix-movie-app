@@ -4,9 +4,9 @@ import { BsInfoCircle, BsPlayFill } from "react-icons/bs";
 import { useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { IMovie } from "../../api";
-import { modalState } from "../../atom";
-import { makeImagePath } from "../../utils";
+import { IMovie } from "../api";
+import { modalState } from "../atom";
+import { makeImagePath } from "../utils";
 
 const Mainhome = styled.div<{ bgPhoto: string }>`
   height: 56.25vw;
