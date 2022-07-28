@@ -59,9 +59,7 @@ const MovieBox = styled(motion.div)`
       border-bottom-right-radius: 0;
     }
   }
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 `;
 const MovieBoxVariants = {
   normal: {
@@ -148,7 +146,6 @@ const Sliders = ({ id, title, movies, query, part }: IData) => {
       setSliderMoving(true);
       setSliderMovingPrev(false);
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
-      console.log(index);
     }
   };
   const decreaseIndex = () => {
@@ -165,8 +162,8 @@ const Sliders = ({ id, title, movies, query, part }: IData) => {
   };
   const [isModalActive, setIsActive] = useRecoilState(modalState);
   const history = useHistory();
-  const onBoxClicked = (movieId: number) => {
-    history.push(`/movies/${movieId}`);
+  const onBoxClicked = (movieId: number, id: string) => {
+    history.push(`/movies/${id}/${movieId}`);
     setIsActive(true);
   };
   return (
@@ -200,8 +197,8 @@ const Sliders = ({ id, title, movies, query, part }: IData) => {
                 initial="normal"
                 whileHover="hover"
                 transition={{ type: "tween" }}
-                onClick={() => onBoxClicked(movie.id)}
-                layoutId={movie.id + ""}
+                onClick={() => onBoxClicked(movie.id, id)}
+                layoutId={movie.id + "" + id}
                 key={movie.id}
               >
                 <img src={makeImagePath(movie.poster_path, "w500")} />

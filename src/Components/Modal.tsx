@@ -168,10 +168,22 @@ const recommendBoxes = styled.div`
 `;
 const recommendCard = styled.div``;
 
+interface IModalData {
+  movieDetail: ;
+  movieClips: ;
+  movieRecomendations: ;
+}
+
 function Modal({ movieDetail, movieClips, movieRecomendations }: any) {
-  console.log(movieDetail, movieClips, movieRecomendations);
-  const bigModalMatch = useRouteMatch<{ movieId: string }>("/movies/:movieId");
+  //console.log(movieDetail, movieClips, movieRecomendations);
+  const bigModalMatch = useRouteMatch<{ part: string; movieId: string }>(
+    "/movies/:part/:movieId"
+  );
   const movieId = bigModalMatch?.params.movieId;
+  const id = bigModalMatch?.params.part;
+  const layoutId = bigModalMatch?.params.movieId
+    ? movieId + bigModalMatch?.params.part
+    : undefined;
   const history = useHistory();
 
   const [isModalActive, setIsActive] = useRecoilState(modalState);
@@ -179,6 +191,10 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: any) {
   const onModalClose = () => {
     setIsActive(false);
     history.push("/");
+  };
+  const onModalOpen = (movieId: number, id: string | undefined) => {
+    history.push(`/movies/${id}/${movieId}`);
+    setIsActive(true);
   };
 
   const recommendations = movieRecomendations?.results?.slice(0, 12);
@@ -194,7 +210,7 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: any) {
               transition={{ type: "tween", duration: 0.3 }}
             />
             <ModalContainer>
-              <ModalDialog layoutId={bigModalMatch.params.movieId}>
+              <ModalDialog layoutId={layoutId}>
                 <div className="video">
                   <TrailerVideo id={bigModalMatch.params.movieId} />
                 </div>
@@ -357,7 +373,10 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: any) {
                                     display: "flex",
                                     flexDirection: "column",
                                     alignItems: "center",
+                                    cursor: "pointer",
                                   }}
+                                  key={recomend.id}
+                                  onClick={() => onModalOpen(recomend.id, id)}
                                 >
                                   <img
                                     src={makeImagePath(

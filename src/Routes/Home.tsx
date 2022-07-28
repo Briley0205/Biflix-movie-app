@@ -12,6 +12,9 @@ import {
   IMovie,
   getClipDetails,
   getMovieRecommend,
+  getPopularMovies,
+  getTopRatedMovies,
+  getUpcomingMovies,
 } from "../api";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -20,7 +23,7 @@ import Banner from "../Components/Banner";
 import Sliders from "../Components/Sliders";
 import Modal from "../Components/Modal";
 
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
 
@@ -29,19 +32,33 @@ const Wrapper = styled.div`
   overflow-x: hidden;
 `;
 const Loader = styled.div`
-  height: 200vh;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
+interface MovieDetailRouteState {
+  movie?: IMovie;
+  layoutId?: string;
+}
+
 function Home() {
   const part = "movie";
-  const bigModalMatch = useRouteMatch<{ movieId: string }>("/movies/:movieId");
+  const bigModalMatch = useRouteMatch<{ movieId: string }>(
+    "/movies/:part/:movieId"
+  );
   const movieId = bigModalMatch?.params.movieId;
+  const location = useLocation() as { state: MovieDetailRouteState };
+  const locationStateLayoutId = location.state?.layoutId ?? undefined;
+  console.log(locationStateLayoutId);
 
-  const { data: nowPlayingData, isLoading: popularLoading } =
+  const { data: nowPlayingData, isLoading: playingLoading } =
     useQuery<IGetMoviesResult>(["nowPlaying", "movie"], getNowPlayingMovies);
+  const { data: topRatedData, isLoading: topLoading } =
+    useQuery<IGetMoviesResult>(["toprated", "movie"], getTopRatedMovies);
+  const { data: upcomingData, isLoading: upcomeLoading } =
+    useQuery<IGetMoviesResult>(["upcoming", "movie"], getUpcomingMovies);
+
   const { data: movieDetail, isLoading: movieLoading } = useQuery(
     ["movie", movieId],
     () => getMovieDetail(movieId || "")
@@ -58,34 +75,61 @@ function Home() {
   const clips = movieClips?.results?.reverse().slice(0, 3);
 
   return (
-    <Wrapper
-      style={{
-        height: "200vh",
-      }}
-    >
+    <Wrapper>
       <Helmet>
         <title>Home | BIFLIX</title>
         <link rel="icon" href="../image/Logo-piyo.svg" />
       </Helmet>
-      {popularLoading ? (
+      {playingLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
           <Banner movies={nowPlayingData?.results}></Banner>
           <Sliders
-            id="nowplayingmovies"
+            id="nowPlayingData"
             movies={nowPlayingData?.results ?? []}
             title="Now Playing"
             query="nowPlayingData"
             part={part}
           ></Sliders>
-          <Modal
+          {/* <Modal
             movieDetail={movieDetail ?? []}
             movieClips={clips ?? []}
             movieRecomendations={movieRecomendations ?? []}
-          ></Modal>
+          ></Modal> */}
         </>
       )}
+      {upcomeLoading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Sliders
+            id="upcomingData"
+            movies={upcomingData?.results ?? []}
+            title="UP Coming Movie"
+            query="upcomingData"
+            part={part}
+          ></Sliders>
+        </>
+      )}
+      {topLoading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Sliders
+            id="topratedData"
+            movies={topRatedData?.results ?? []}
+            title="TOP Rated"
+            query="topratedData"
+            part={part}
+          ></Sliders>
+        </>
+      )}
+      <Modal
+        movieDetail={movieDetail ?? []}
+        movieClips={clips ?? []}
+        movieRecomendations={movieRecomendations ?? []}
+      ></Modal>
     </Wrapper>
   );
 }
