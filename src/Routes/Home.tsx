@@ -12,20 +12,17 @@ import {
   IMovie,
   getClipDetails,
   getMovieRecommend,
-  getPopularMovies,
   getTopRatedMovies,
   getUpcomingMovies,
+  getTvTrendings,
 } from "../api";
-import { AnimatePresence, motion } from "framer-motion";
 
 /**Components */
 import Banner from "../Components/Banner";
 import Sliders from "../Components/Sliders";
 import Modal from "../Components/Modal";
 
-import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { modalState } from "../atom";
+import { useRouteMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
   background-color: #141414;
@@ -43,14 +40,16 @@ interface MovieDetailRouteState {
 }
 
 function Home() {
-  const part = "movie";
-  const bigModalMatch = useRouteMatch<{ movieId: string }>(
-    "/movies/:part/:movieId"
-  );
-  const movieId = bigModalMatch?.params.movieId;
-  const location = useLocation() as { state: MovieDetailRouteState };
-  const locationStateLayoutId = location.state?.layoutId ?? undefined;
-  console.log(locationStateLayoutId);
+  const bigModalMatch = useRouteMatch<{
+    part: string;
+    sliderPart: string;
+    id: string;
+  }>("/:part/:sliderPart/:id");
+  const part = bigModalMatch?.params.part;
+  const id = bigModalMatch?.params.id;
+  // const location = useLocation() as { state: MovieDetailRouteState };
+  // const locationStateLayoutId = location.state?.layoutId ?? undefined;
+  // console.log(locationStateLayoutId);
 
   const { data: nowPlayingData, isLoading: playingLoading } =
     useQuery<IGetMoviesResult>(["nowPlaying", "movie"], getNowPlayingMovies);
@@ -58,20 +57,19 @@ function Home() {
     useQuery<IGetMoviesResult>(["toprated", "movie"], getTopRatedMovies);
   const { data: upcomingData, isLoading: upcomeLoading } =
     useQuery<IGetMoviesResult>(["upcoming", "movie"], getUpcomingMovies);
+  const { data: tvTrendingData, isLoading: trendingLoading } =
+    useQuery<IGetMoviesResult>(["trending", "all"], getTvTrendings);
 
   const { data: movieDetail, isLoading: movieLoading } = useQuery(
-    ["movie", movieId],
-    () => getMovieDetail(movieId || "")
+    ["movie", id],
+    () => getMovieDetail(part, id || "")
   );
   const { data: movieClips, isLoading: detailLoading } = useQuery(
-    ["clips", movieId],
-    () => getClipDetails(movieId || "")
+    ["clips", id],
+    () => getClipDetails(part, id || "")
   );
   const { data: movieRecomendations, isLoading: recommendationLoading } =
-    useQuery(["movieRecommend", movieId], () =>
-      getMovieRecommend(movieId || "")
-    );
-  console.log(movieRecomendations);
+    useQuery(["movieRecommend", id], () => getMovieRecommend(part, id || ""));
   const clips = movieClips?.results?.reverse().slice(0, 3);
 
   return (
@@ -89,14 +87,22 @@ function Home() {
             id="nowPlayingData"
             movies={nowPlayingData?.results ?? []}
             title="Now Playing"
-            query="nowPlayingData"
-            part={part}
+            query="nowPlayingMovies"
+            part="movie"
           ></Sliders>
-          {/* <Modal
-            movieDetail={movieDetail ?? []}
-            movieClips={clips ?? []}
-            movieRecomendations={movieRecomendations ?? []}
-          ></Modal> */}
+        </>
+      )}
+      {trendingLoading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Sliders
+            id="trendingData"
+            movies={tvTrendingData?.results ?? []}
+            title="Top Rated Tv Show"
+            query="topRatedTvShow"
+            part="tv"
+          ></Sliders>
         </>
       )}
       {upcomeLoading ? (
@@ -108,7 +114,7 @@ function Home() {
             movies={upcomingData?.results ?? []}
             title="UP Coming Movie"
             query="upcomingData"
-            part={part}
+            part="movie"
           ></Sliders>
         </>
       )}
@@ -121,7 +127,7 @@ function Home() {
             movies={topRatedData?.results ?? []}
             title="TOP Rated"
             query="topratedData"
-            part={part}
+            part="movie"
           ></Sliders>
         </>
       )}

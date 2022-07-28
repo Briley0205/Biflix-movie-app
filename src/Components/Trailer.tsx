@@ -24,6 +24,7 @@ const ModalTitleWrapper = styled.div`
 
 interface IGetTrailer {
   id: string;
+  part?: string;
 }
 interface IVideo {
   iso_639_1: string;
@@ -38,11 +39,11 @@ interface IVideo {
   id: string;
 }
 
-const TrailerVideo = ({ id }: IGetTrailer) => {
+const TrailerVideo = ({ part, id }: IGetTrailer) => {
   const [videoKey, setVideoKey] = useState("");
   useEffect(() => {
     (async () => {
-      const { results } = await getMovieTrailer(id);
+      const { results } = await getMovieTrailer(part, id);
       const trailer = results.filter(
         (result: IVideo) => result.type === "Trailer"
       );

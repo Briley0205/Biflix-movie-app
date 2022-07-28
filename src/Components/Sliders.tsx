@@ -162,8 +162,8 @@ const Sliders = ({ id, title, movies, query, part }: IData) => {
   };
   const [isModalActive, setIsActive] = useRecoilState(modalState);
   const history = useHistory();
-  const onBoxClicked = (movieId: number, id: string) => {
-    history.push(`/movies/${id}/${movieId}`);
+  const onBoxClicked = (part: string, id: number, sliderId: string) => {
+    history.push(`/${part}/${sliderId}/${id}`);
     setIsActive(true);
   };
   return (
@@ -197,13 +197,17 @@ const Sliders = ({ id, title, movies, query, part }: IData) => {
                 initial="normal"
                 whileHover="hover"
                 transition={{ type: "tween" }}
-                onClick={() => onBoxClicked(movie.id, id)}
+                onClick={() => onBoxClicked(part, movie.id, id)}
                 layoutId={movie.id + "" + id}
                 key={movie.id}
               >
                 <img src={makeImagePath(movie.poster_path, "w500")} />
                 <MovieBoxInfo variants={infoVariants}>
-                  <h4>{movie.title}</h4>
+                  {part === "movie" ? (
+                    <h4>{movie.title}</h4>
+                  ) : (
+                    <h4>{movie.name}</h4>
+                  )}
                 </MovieBoxInfo>
               </MovieBox>
             ))}

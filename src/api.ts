@@ -14,6 +14,7 @@ export interface IMovie {
   popularity: number;
   vote_count: number;
   is_tv?: boolean;
+  name?: string;
 }
 
 export interface IGetMoviesResult {
@@ -27,13 +28,33 @@ export interface IGetMoviesResult {
   total_results: number;
 }
 
+export interface IMovieDetail {
+  genres: [number];
+  homepage: string;
+  id: number;
+  name?: string;
+  first_air_date?: string;
+  episode_run_time?: [number];
+  orijinal_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  runtime: number;
+  tagline: string;
+  title: string;
+  vote_average: number;
+}
+export interface IMovieRecommendations {
+  page: number;
+  results: IMovie[];
+  total_pages: number;
+  total_results: number;
+}
+
 export function getNowPlayingMovies() {
   return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}`).then(
-    (response) => response.json()
-  );
-}
-export function getPopularMovies() {
-  return fetch(`${BASE_PATH}/movie/popular?api_key=${API_KEY}`).then(
     (response) => response.json()
   );
 }
@@ -44,6 +65,11 @@ export function getTopRatedMovies() {
 }
 export function getUpcomingMovies() {
   return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}`).then(
+    (response) => response.json()
+  );
+}
+export function getTvTrendings() {
+  return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}`).then(
     (response) => response.json()
   );
 }
@@ -60,24 +86,24 @@ export function findTvShows(keyword: string | null) {
   ).then((response) => response.json());
 }
 
-export async function getMovieDetail(id?: string) {
-  return fetch(`${BASE_PATH}/movie/${id}?api_key=${API_KEY}`).then((response) =>
-    response.json()
-  );
-}
-export async function getClipDetails(id?: string) {
-  return await fetch(`${BASE_PATH}/movie/${id}/videos?api_key=${API_KEY}`).then(
+export async function getMovieDetail(part?: string, id?: string) {
+  return fetch(`${BASE_PATH}/${part}/${id}?api_key=${API_KEY}`).then(
     (response) => response.json()
   );
 }
+export async function getClipDetails(part?: string, id?: string) {
+  return await fetch(
+    `${BASE_PATH}/${part}/${id}/videos?api_key=${API_KEY}`
+  ).then((response) => response.json());
+}
 
-export async function getMovieTrailer(id?: string) {
+export async function getMovieTrailer(part?: string, id?: string) {
   return await (
-    await fetch(`${BASE_PATH}/movie/${id}/videos?api_key=${API_KEY}`)
+    await fetch(`${BASE_PATH}/${part}/${id}/videos?api_key=${API_KEY}`)
   ).json();
 }
-export async function getMovieRecommend(id?: string) {
+export async function getMovieRecommend(part?: string, id?: string) {
   return await fetch(
-    `${BASE_PATH}/movie/${id}/recommendations?api_key=${API_KEY}`
+    `${BASE_PATH}/${part}/${id}/recommendations?api_key=${API_KEY}`
   ).then((response) => response.json());
 }

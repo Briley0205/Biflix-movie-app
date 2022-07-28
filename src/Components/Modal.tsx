@@ -13,6 +13,7 @@ import {
   getYoutubeVideoUrl,
   makeImagePath,
 } from "../utils";
+import { IMovieDetail, IMovieRecommendations } from "../api";
 
 const ModalContainer = styled(motion.div)`
   position: fixed;
@@ -169,20 +170,23 @@ const recommendBoxes = styled.div`
 const recommendCard = styled.div``;
 
 interface IModalData {
-  movieDetail: ;
-  movieClips: ;
-  movieRecomendations: ;
+  movieDetail: IMovieDetail;
+  movieClips: [string];
+  movieRecomendations: IMovieRecommendations;
 }
 
-function Modal({ movieDetail, movieClips, movieRecomendations }: any) {
-  //console.log(movieDetail, movieClips, movieRecomendations);
-  const bigModalMatch = useRouteMatch<{ part: string; movieId: string }>(
-    "/movies/:part/:movieId"
-  );
-  const movieId = bigModalMatch?.params.movieId;
-  const id = bigModalMatch?.params.part;
-  const layoutId = bigModalMatch?.params.movieId
-    ? movieId + bigModalMatch?.params.part
+function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
+  //console.log(movieDetail, movieRecomendations);
+  const bigModalMatch = useRouteMatch<{
+    part: string;
+    sliderPart: string;
+    id: string;
+  }>("/:part/:sliderPart/:id");
+  const part = bigModalMatch?.params.part;
+  const id = bigModalMatch?.params.id;
+  const sliderPart = bigModalMatch?.params.sliderPart;
+  const layoutId = bigModalMatch?.params.id
+    ? id + bigModalMatch?.params.sliderPart
     : undefined;
   const history = useHistory();
 
@@ -192,8 +196,12 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: any) {
     setIsActive(false);
     history.push("/");
   };
-  const onModalOpen = (movieId: number, id: string | undefined) => {
-    history.push(`/movies/${id}/${movieId}`);
+  const onModalOpen = (
+    part: string | undefined,
+    id: number,
+    sliderId: string | undefined
+  ) => {
+    history.push(`/${part}/${sliderId}/${id}`);
     setIsActive(true);
   };
 
@@ -212,7 +220,7 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: any) {
             <ModalContainer>
               <ModalDialog layoutId={layoutId}>
                 <div className="video">
-                  <TrailerVideo id={bigModalMatch.params.movieId} />
+                  <TrailerVideo part={part} id={bigModalMatch.params.id} />
                 </div>
 
                 <CloseButton onClick={onModalClose}>
@@ -250,13 +258,17 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: any) {
                             color: "#46d369",
                           }}
                         >
-                          {movieDetail?.release_date}
+                          {part === "movie"
+                            ? movieDetail?.release_date
+                            : movieDetail?.first_air_date}
                         </div>
                         <div
                           className="runTime"
                           style={{ marginRight: "0.5em" }}
                         >
-                          {movieDetail?.runtime ?? null} minutes
+                          {part === "movie"
+                            ? `${movieDetail?.runtime} minutes`
+                            : `${movieDetail?.episode_run_time} minutes`}
                         </div>
                         <span
                           className="player-feature-badge"
@@ -296,7 +308,9 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: any) {
                       </PrevModalTags>
                       <PrevModalTags>
                         <span className="tags-label">title:</span>
-                        {movieDetail?.title}
+                        {part === "movie"
+                          ? movieDetail?.title
+                          : movieDetail?.name}
                       </PrevModalTags>
                       <PrevModalTags>
                         <span className="tags-label">genres:</span>
@@ -376,7 +390,9 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: any) {
                                     cursor: "pointer",
                                   }}
                                   key={recomend.id}
-                                  onClick={() => onModalOpen(recomend.id, id)}
+                                  onClick={() =>
+                                    onModalOpen(part, recomend.id, id)
+                                  }
                                 >
                                   <img
                                     src={makeImagePath(

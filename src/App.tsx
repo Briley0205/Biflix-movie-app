@@ -33,7 +33,7 @@ function App() {
         </Route>
       </Switch>
       <Switch>
-        <Route path={["/", "/movies/:movieId"]}>
+        <Route path={["/", "/:part/:sliderPart/:id"]}>
           <Home />
         </Route>
       </Switch>
