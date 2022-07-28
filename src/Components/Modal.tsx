@@ -218,7 +218,7 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
               transition={{ type: "tween", duration: 0.3 }}
             />
             <ModalContainer>
-              <ModalDialog layoutId={layoutId}>
+              <ModalDialog>
                 <div className="video">
                   <TrailerVideo part={part} id={bigModalMatch.params.id} />
                 </div>
