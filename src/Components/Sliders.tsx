@@ -67,8 +67,8 @@ const MovieBoxVariants = {
   },
   hover: {
     scale: 1.3,
-    y: -50,
-    transition: { delay: 1, duration: 0.3, type: "tween" },
+    y: -30,
+    transition: { delay: 0.5, duration: 0.3, type: "tween" },
   },
 };
 const ArrowBox = styled(motion.span)`
@@ -117,7 +117,7 @@ const infoVariants = {
   hover: {
     opacity: 1,
     transition: {
-      delay: 1,
+      delay: 0.5,
       duration: 0.3,
       type: "tween",
     },
@@ -134,7 +134,7 @@ interface IData {
   part: string;
 }
 
-const Sliders = ({ id, title, movies, query, part }: IData) => {
+const Sliders = ({ id, title, movies, part }: IData) => {
   const [index, setIndex] = useState(0);
   const [sliderMoving, setSliderMoving] = useState(false);
   const [sliderMovingPrev, setSliderMovingPrev] = useState(false);
@@ -198,7 +198,6 @@ const Sliders = ({ id, title, movies, query, part }: IData) => {
                 whileHover="hover"
                 transition={{ type: "tween" }}
                 onClick={() => onBoxClicked(part, movie.id, id)}
-                layoutId={movie.id + "" + id}
                 key={movie.id}
               >
                 <img src={makeImagePath(movie.poster_path, "w500")} />

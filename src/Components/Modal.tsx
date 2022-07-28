@@ -159,15 +159,29 @@ const TitleCardMeta = styled.div`
     font-size: 14px;
   }
 `;
-
-const recommendBoxes = styled.div`
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 1em;
-  align-items: stretch;
-  display: grid;
-  justify-items: stretch;
+const RecommendCard = styled(motion.div)`
+  position: absolute;
+  width: 100%;
+  padding: 10px;
+  background-color: #2f2f2f;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
 `;
-const recommendCard = styled.div``;
+const RecommendBoxes = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  &:hover {
+    ${RecommendCard} {
+      opacity: 1;
+    }
+  }
+`;
 
 interface IModalData {
   movieDetail: IMovieDetail;
@@ -218,7 +232,12 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
               transition={{ type: "tween", duration: 0.3 }}
             />
             <ModalContainer>
-              <ModalDialog>
+              <ModalDialog
+                exit={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                initial={{ opacity: 0 }}
+                transition={{ type: "tween", duration: 0.5 }}
+              >
                 <div className="video">
                   <TrailerVideo part={part} id={bigModalMatch.params.id} />
                 </div>
@@ -283,15 +302,18 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
                           HD
                         </span>
                       </div>
-                      <p className="preview-modal-synopsis" style={{
+                      <p
+                        className="preview-modal-synopsis"
+                        style={{
                           fontSize: "15px",
                           lineHeight: "24px",
                           marginTop: "1em",
                           color: "#d2d2d2",
-                          fontStyle: "italic"
-                        }}>
-                          {movieDetail?.tagline}
-                        </p>
+                          fontStyle: "italic",
+                        }}
+                      >
+                        {movieDetail?.tagline}
+                      </p>
                       <p
                         className="preview-modal-synopsis"
                         style={{
@@ -372,51 +394,62 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
                     </div>
                   </section>
                   {recommendations ? (
-                    <>
-                      <section className="ptrack-container">
-                        <div className="moreLikeThis--wrapper">
-                          <ModalTitle>More like contents</ModalTitle>
-                          <div className="recommendationsBody">
-                            <div
-                              style={{
-                                gridTemplateColumns: "repeat(4, 1fr)",
-                                gridGap: "1em",
-                                alignItems: "stretch",
-                                display: "grid",
-                                justifyItems: "stretch",
-                              }}
-                            >
-                              {recommendations?.map((recomend: any) => (
-                                <div
+                    <section className="ptrack-container">
+                      <div className="moreLikeThis--wrapper">
+                        <ModalTitle>More like contents</ModalTitle>
+                        <div className="recommendationsBody">
+                          <div
+                            style={{
+                              gridTemplateColumns: "repeat(4, 1fr)",
+                              gridGap: "1em",
+                              alignItems: "stretch",
+                              display: "grid",
+                              justifyItems: "stretch",
+                            }}
+                          >
+                            {recommendations?.map((recomend: any) => (
+                              <RecommendBoxes
+                                key={recomend.id}
+                                onClick={() =>
+                                  onModalOpen(part, recomend.id, id)
+                                }
+                              >
+                                <img
+                                  src={makeImagePath(
+                                    recomend.poster_path,
+                                    "w500"
+                                  )}
                                   style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    cursor: "pointer",
+                                    width: "100%",
                                   }}
-                                  key={recomend.id}
-                                  onClick={() =>
-                                    onModalOpen(part, recomend.id, id)
-                                  }
-                                >
-                                  <img
-                                    src={makeImagePath(
-                                      recomend.poster_path,
-                                      "w500"
-                                    )}
-                                    style={{
-                                      width: "100%",
-                                      borderRadius: "5px",
-                                    }}
-                                  />
-                                  {part === "movie" ? <h4>{recomend.title}</h4> : <h4>{recomend.name}</h4>}
-                                </div>
-                              ))}
-                            </div>
+                                />
+                                <RecommendCard>
+                                  {part === "movie" ? (
+                                    <h4
+                                      style={{
+                                        textAlign: "center",
+                                        fontSize: "1vw",
+                                      }}
+                                    >
+                                      {recomend.title}
+                                    </h4>
+                                  ) : (
+                                    <h4
+                                      style={{
+                                        textAlign: "center",
+                                        fontSize: "1vw",
+                                      }}
+                                    >
+                                      {recomend.name}
+                                    </h4>
+                                  )}
+                                </RecommendCard>
+                              </RecommendBoxes>
+                            ))}
                           </div>
                         </div>
-                      </section>
-                    </>
+                      </div>
+                    </section>
                   ) : null}
                 </DetailModal>
               </ModalDialog>

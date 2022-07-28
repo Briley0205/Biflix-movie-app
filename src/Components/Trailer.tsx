@@ -61,7 +61,7 @@ const TrailerVideo = ({ part, id }: IGetTrailer) => {
             src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&controls=0&rel=0`}
             title="YouTube video player"
             frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;"
           ></iframe>
           <ModalTitleWrapper />
         </Wrapper>

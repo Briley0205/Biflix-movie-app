@@ -52,16 +52,15 @@ function Home() {
   const { data: tvTrendingData, isLoading: trendingLoading } =
     useQuery<IGetMoviesResult>(["trending", "all"], getTvTrendings);
 
-  const { data: movieDetail, isLoading: movieLoading } = useQuery(
-    ["movie", id],
-    () => getMovieDetail(part, id || "")
+  const { data: movieDetail } = useQuery(["movie", id], () =>
+    getMovieDetail(part, id || "")
   );
-  const { data: movieClips, isLoading: detailLoading } = useQuery(
-    ["clips", id],
-    () => getClipDetails(part, id || "")
+  const { data: movieClips } = useQuery(["clips", id], () =>
+    getClipDetails(part, id || "")
   );
-  const { data: movieRecomendations, isLoading: recommendationLoading } =
-    useQuery(["movieRecommend", id], () => getMovieRecommend(part, id || ""));
+  const { data: movieRecomendations } = useQuery(["movieRecommend", id], () =>
+    getMovieRecommend(part, id || "")
+  );
   const clips = movieClips?.results?.reverse().slice(0, 3);
 
   return (
