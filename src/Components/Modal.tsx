@@ -176,7 +176,7 @@ interface IModalData {
 }
 
 function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
-  //console.log(movieDetail, movieRecomendations);
+  console.log(movieDetail);
   const bigModalMatch = useRouteMatch<{
     part: string;
     sliderPart: string;
@@ -283,12 +283,21 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
                           HD
                         </span>
                       </div>
+                      <p className="preview-modal-synopsis" style={{
+                          fontSize: "15px",
+                          lineHeight: "24px",
+                          marginTop: "1em",
+                          color: "#d2d2d2",
+                          fontStyle: "italic"
+                        }}>
+                          {movieDetail?.tagline}
+                        </p>
                       <p
                         className="preview-modal-synopsis"
                         style={{
                           fontSize: "15px",
                           lineHeight: "24px",
-                          marginTop: "1em",
+                          marginTop: "0.5em",
                           marginBottom: "0.5em",
                         }}
                       >
@@ -302,10 +311,6 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
                         flexDirection: "column",
                       }}
                     >
-                      <PrevModalTags>
-                        <span className="tags-label">tag:</span>
-                        {movieDetail?.tagline}
-                      </PrevModalTags>
                       <PrevModalTags>
                         <span className="tags-label">title:</span>
                         {part === "movie"
@@ -404,7 +409,7 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
                                       borderRadius: "5px",
                                     }}
                                   />
-                                  <h4>{recomend.title}</h4>
+                                  {part === "movie" ? <h4>{recomend.title}</h4> : <h4>{recomend.name}</h4>}
                                 </div>
                               ))}
                             </div>

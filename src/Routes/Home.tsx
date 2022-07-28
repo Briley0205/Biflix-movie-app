@@ -34,11 +34,6 @@ const Loader = styled.div`
   align-items: center;
 `;
 
-interface MovieDetailRouteState {
-  movie?: IMovie;
-  layoutId?: string;
-}
-
 function Home() {
   const bigModalMatch = useRouteMatch<{
     part: string;
@@ -47,9 +42,6 @@ function Home() {
   }>("/:part/:sliderPart/:id");
   const part = bigModalMatch?.params.part;
   const id = bigModalMatch?.params.id;
-  // const location = useLocation() as { state: MovieDetailRouteState };
-  // const locationStateLayoutId = location.state?.layoutId ?? undefined;
-  // console.log(locationStateLayoutId);
 
   const { data: nowPlayingData, isLoading: playingLoading } =
     useQuery<IGetMoviesResult>(["nowPlaying", "movie"], getNowPlayingMovies);
