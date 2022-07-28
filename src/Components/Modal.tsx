@@ -6,8 +6,7 @@ import { modalState } from "../atom";
 
 import TrailerVideo from "../Components/Trailer";
 
-import { MdClose } from "react-icons/md";
-import { MdPlayArrow } from "react-icons/md";
+import { MdClose, MdPlayArrow } from "react-icons/md";
 import {
   getYoutubeTumbnail,
   getYoutubeVideoUrl,

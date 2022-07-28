@@ -62,7 +62,7 @@ function Home() {
     getMovieRecommend(part, id || "")
   );
   const clips = movieClips?.results?.reverse().slice(0, 3);
-
+  const homeMatch = useRouteMatch("/");
   return (
     <Wrapper>
       <Helmet>

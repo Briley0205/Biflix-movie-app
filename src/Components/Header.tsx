@@ -95,6 +95,7 @@ function Header() {
   /**It wil tell if I am in the url */
   const homeMatch = useRouteMatch("/");
   const tvMatch = useRouteMatch("/tv");
+  console.log(tvMatch);
   /**useAnimation() hook triggers the animation in outer function */
   const [searchOpen, setSearchOpen] = useState(false);
   const inputAnimation = useAnimation();

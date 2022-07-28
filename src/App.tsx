@@ -1,5 +1,5 @@
 /**For router */
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 /**Get some screens */
 import Home from "./Routes/Home";
@@ -20,24 +20,20 @@ function App() {
       : (document.body.style.overflowY = "scroll");
   }, [isModalActive]);
   return (
-    <Router>
+    <BrowserRouter>
       <Header />
       <Switch>
         <Route path="/search">
           <Search />
         </Route>
-      </Switch>
-      <Switch>
         <Route path="/tv">
           <Tv />
         </Route>
-      </Switch>
-      <Switch>
         <Route path={["/", "/:part/:sliderPart/:id"]}>
           <Home />
         </Route>
       </Switch>
-    </Router>
+    </BrowserRouter>
   );
 }
 
