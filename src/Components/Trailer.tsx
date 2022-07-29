@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getMovieTrailer } from "../api";
+import { getTrailer } from "../api";
 
 const Wrapper = styled.div`
   position: relative;
-  width: 100%;
+  width: calc(100% + 2px);
+  right: 0;
+  left: 0;
+  top: 0;
   height: calc((100vh - 48px) * (3 / 5));
   object-fit: contain;
   iframe {
@@ -43,7 +46,7 @@ const TrailerVideo = ({ part, id }: IGetTrailer) => {
   const [videoKey, setVideoKey] = useState("");
   useEffect(() => {
     (async () => {
-      const { results } = await getMovieTrailer(part, id);
+      const { results } = await getTrailer(part, id);
       const trailer = results.filter(
         (result: IVideo) => result.type === "Trailer"
       );
@@ -51,6 +54,7 @@ const TrailerVideo = ({ part, id }: IGetTrailer) => {
         trailer[Math.ceil(Math.random() * (trailer.length - 1))];
       const videoKey = randomVideo?.key;
       setVideoKey(videoKey);
+      console.log(videoKey);
     })();
   }, [id]);
   return (

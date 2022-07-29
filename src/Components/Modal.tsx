@@ -42,10 +42,18 @@ const ModalDialog = styled(motion.article)`
 const Overlay = styled(motion.div)`
   position: fixed;
   top: 0;
-  width: 100%;
+  width: 99%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 100;
+`;
+const ModalHeader = styled.div<{ bgPhoto?: string }>`
+  width: 100%;
+  height: calc((100vh - 48px) * (3 / 5));
+  object-fit: cover;
+  background-image: linear-gradient(0deg, #181818, transparent 50%),
+    url(${(props) => props.bgPhoto});
+  background-size: cover;
 `;
 const CloseButton = styled.div`
   position: absolute;
@@ -189,7 +197,7 @@ interface IModalData {
 }
 
 function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
-  console.log(movieDetail);
+  console.log(movieDetail, movieClips, movieRecomendations);
   const bigModalMatch = useRouteMatch<{
     part: string;
     sliderPart: string;
@@ -207,7 +215,7 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
 
   const onModalClose = () => {
     setIsActive(false);
-    history.push("/");
+    history.goBack();
   };
   const onModalOpen = (
     part: string | undefined,
@@ -237,10 +245,15 @@ function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
                 initial={{ opacity: 0 }}
                 transition={{ type: "tween", duration: 0.5 }}
               >
-                <div className="video">
-                  <TrailerVideo part={part} id={bigModalMatch.params.id} />
-                </div>
-
+                <ModalHeader
+                  bgPhoto={makeImagePath(
+                    movieDetail?.backdrop_path || movieDetail?.poster_path
+                  )}
+                >
+                  <div className="video">
+                    <TrailerVideo part={part} id={bigModalMatch.params.id} />
+                  </div>
+                </ModalHeader>
                 <CloseButton onClick={onModalClose}>
                   <MdClose size="28px" />
                 </CloseButton>

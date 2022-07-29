@@ -8,13 +8,12 @@ import { useQuery } from "react-query";
 import {
   getNowPlayingMovies,
   IGetMoviesResult,
-  getMovieDetail,
+  getDetail,
   IMovie,
   getClipDetails,
-  getMovieRecommend,
+  getRecommend,
   getTopRatedMovies,
   getUpcomingMovies,
-  getTvTrendings,
 } from "../api";
 
 /**Components */
@@ -49,20 +48,17 @@ function Home() {
     useQuery<IGetMoviesResult>(["toprated", "movie"], getTopRatedMovies);
   const { data: upcomingData, isLoading: upcomeLoading } =
     useQuery<IGetMoviesResult>(["upcoming", "movie"], getUpcomingMovies);
-  const { data: tvTrendingData, isLoading: trendingLoading } =
-    useQuery<IGetMoviesResult>(["trending", "all"], getTvTrendings);
 
   const { data: movieDetail } = useQuery(["movie", id], () =>
-    getMovieDetail(part, id || "")
+    getDetail(part, id || "")
   );
   const { data: movieClips } = useQuery(["clips", id], () =>
     getClipDetails(part, id || "")
   );
   const { data: movieRecomendations } = useQuery(["movieRecommend", id], () =>
-    getMovieRecommend(part, id || "")
+    getRecommend(part, id || "")
   );
   const clips = movieClips?.results?.reverse().slice(0, 3);
-  const homeMatch = useRouteMatch("/");
   return (
     <Wrapper>
       <Helmet>
@@ -73,26 +69,17 @@ function Home() {
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner movies={nowPlayingData?.results}></Banner>
+          <Banner
+            id="banner"
+            part="movie"
+            movies={nowPlayingData?.results}
+          ></Banner>
           <Sliders
             id="nowPlayingData"
             movies={nowPlayingData?.results ?? []}
             title="Now Playing"
             query="nowPlayingMovies"
             part="movie"
-          ></Sliders>
-        </>
-      )}
-      {trendingLoading ? (
-        <Loader>Loading...</Loader>
-      ) : (
-        <>
-          <Sliders
-            id="trendingData"
-            movies={tvTrendingData?.results ?? []}
-            title="Top Rated Tv Show"
-            query="topRatedTvShow"
-            part="tv"
           ></Sliders>
         </>
       )}

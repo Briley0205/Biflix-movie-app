@@ -45,6 +45,7 @@ export interface IMovieDetail {
   tagline: string;
   title: string;
   vote_average: number;
+  backdrop_path?: string;
 }
 export interface IMovieRecommendations {
   page: number;
@@ -68,7 +69,13 @@ export function getUpcomingMovies() {
     (response) => response.json()
   );
 }
-export function getTvTrendings() {
+
+export function getTvAiring() {
+  return fetch(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}`).then(
+    (response) => response.json()
+  );
+}
+export function getTvTopRated() {
   return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}`).then(
     (response) => response.json()
   );
@@ -86,7 +93,7 @@ export function findTvShows(keyword: string | null) {
   ).then((response) => response.json());
 }
 
-export async function getMovieDetail(part?: string, id?: string) {
+export async function getDetail(part?: string, id?: string) {
   return fetch(`${BASE_PATH}/${part}/${id}?api_key=${API_KEY}`).then(
     (response) => response.json()
   );
@@ -97,12 +104,12 @@ export async function getClipDetails(part?: string, id?: string) {
   ).then((response) => response.json());
 }
 
-export async function getMovieTrailer(part?: string, id?: string) {
+export async function getTrailer(part?: string, id?: string) {
   return await (
     await fetch(`${BASE_PATH}/${part}/${id}/videos?api_key=${API_KEY}`)
   ).json();
 }
-export async function getMovieRecommend(part?: string, id?: string) {
+export async function getRecommend(part?: string, id?: string) {
   return await fetch(
     `${BASE_PATH}/${part}/${id}/recommendations?api_key=${API_KEY}`
   ).then((response) => response.json());

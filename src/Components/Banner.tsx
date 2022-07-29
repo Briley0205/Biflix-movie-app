@@ -75,19 +75,21 @@ const ButtonIcon = styled.div`
   align-items: center;
 `;
 interface IBanner {
+  id: string;
+  part: string;
   movies?: IMovie[];
 }
 
-const Banner = ({ movies }: IBanner) => {
+const Banner = ({ id, part, movies }: IBanner) => {
   const [movie, setMovie] = useState<IMovie>();
   useEffect(() => {
     if (movies) setMovie(movies[0]);
   }, [movies]);
   const [isModalActive, setIsActive] = useRecoilState(modalState);
   const history = useHistory();
-  const onBoxClicked = (movieId: number) => {
+  const onBoxClicked = (part: string, id: number, sliderId: string) => {
+    history.push(`/${part}/${sliderId}/${id}`);
     setIsActive(true);
-    history.push(`/movies/${movieId}`);
   };
   return (
     <>
@@ -95,17 +97,19 @@ const Banner = ({ movies }: IBanner) => {
         <Mainhome bgPhoto={makeImagePath(movie?.backdrop_path || "")}>
           <TitleLayer>
             <TitleWrapper>
-              <BillBoardTitle>{movie?.title}</BillBoardTitle>
+              <BillBoardTitle>
+                {part === "movie" ? movie?.title : movie?.name}
+              </BillBoardTitle>
             </TitleWrapper>
             <InfoWrapper>{movie?.overview}</InfoWrapper>
             <TitleButtonWrapper>
-              <TitlePlayButton onClick={() => onBoxClicked(movie.id)}>
+              <TitlePlayButton onClick={() => onBoxClicked(part, movie.id, id)}>
                 <ButtonIcon>
                   <BsPlayFill size="2vw" />
                 </ButtonIcon>
                 <span>Play</span>
               </TitlePlayButton>
-              <TitleInfoButton onClick={() => onBoxClicked(movie.id)}>
+              <TitleInfoButton onClick={() => onBoxClicked(part, movie.id, id)}>
                 <ButtonIcon>
                   <BsInfoCircle size="1.5vw" />
                 </ButtonIcon>
