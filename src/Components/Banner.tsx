@@ -64,10 +64,16 @@ const TitlePlayButton = styled(motion.button)`
   color: black;
   font-size: 1vw;
   font-weight: 600;
+  &:hover {
+    background-color: rgba(255,255,255,0.75);
+  }
 `;
 const TitleInfoButton = styled(TitlePlayButton)`
   background-color: rgba(109, 109, 110, 0.7);
   color: white;
+  &:hover {
+    background-color: rgba(109,109,110,0.4);
+  }
 `;
 const ButtonIcon = styled.div`
   display: flex;

@@ -95,7 +95,6 @@ function Header() {
   /**It wil tell if I am in the url */
   const homeMatch = useRouteMatch("/");
   const tvMatch = useRouteMatch("/tv");
-  console.log(tvMatch);
   /**useAnimation() hook triggers the animation in outer function */
   const [searchOpen, setSearchOpen] = useState(false);
   const inputAnimation = useAnimation();
@@ -131,13 +130,13 @@ function Header() {
         <Items>
           <Item>
             <Link to="/">
-              <span>Home</span>
+              <span style={{color: homeMatch?.isExact ? "#E51013" : "white", fontWeight: homeMatch?.isExact ? "600" : "400"}}>Home</span>
               {homeMatch?.isExact && <NavUnderBar layoutId="nav" />}
             </Link>
           </Item>
           <Item>
             <Link to="/tv">
-              <span>Tv Shows</span>
+              <span style={{color: tvMatch?.isExact ? "#E51013" : "white", fontWeight: tvMatch?.isExact ? "600" : "400"}}>Tv Shows</span>
               {tvMatch?.isExact && <NavUnderBar layoutId="nav" />}
             </Link>
           </Item>
