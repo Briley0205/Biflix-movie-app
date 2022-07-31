@@ -14,6 +14,9 @@ const Slider = styled.div`
   margin: 3vw 0;
   height: 25vw;
   padding: 0;
+  &:hover svg {
+    opacity: 1;
+  }
 `;
 const SliderTitle = styled.h2`
   line-height: 1.3;
@@ -88,10 +91,13 @@ const ArrowBox = styled(motion.span)`
   background: rgba(20, 20, 20, 0.5);
   border-radius: 0 5px 5px 0;
   svg {
+    color: rgba(255, 255, 255, 0.5); 
+    transition: all 0.1s ease;
     opacity: 0;
   }
   &:hover svg {
-    opacity: 1;
+    color: rgb(255, 255, 255);
+    transform: scale(1.4);
   }
 `;
 const RightArrow = styled(ArrowBox)`
