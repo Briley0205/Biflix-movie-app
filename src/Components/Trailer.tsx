@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   right: 0;
   left: 0;
   top: 0;
-  height: calc((100vh - 48px) * (3 / 5));
+  height: calc((100vh - 48px) * (4 / 5));
   object-fit: contain;
   iframe {
     position: relative;

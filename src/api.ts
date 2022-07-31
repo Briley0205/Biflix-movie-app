@@ -55,28 +55,28 @@ export interface IMovieRecommendations {
 }
 
 export function getNowPlayingMovies() {
-  return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}`).then(
+  return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR`).then(
     (response) => response.json()
   );
 }
 export function getTopRatedMovies() {
-  return fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}`).then(
+  return fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko-KR`).then(
     (response) => response.json()
   );
 }
 export function getUpcomingMovies() {
-  return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}`).then(
+  return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko-KR`).then(
     (response) => response.json()
   );
 }
 
 export function getTvAiring() {
-  return fetch(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}`).then(
+  return fetch(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko-KR`).then(
     (response) => response.json()
   );
 }
 export function getTvTopRated() {
-  return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}`).then(
+  return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR`).then(
     (response) => response.json()
   );
 }
@@ -94,23 +94,23 @@ export function findTvShows(keyword: string | null) {
 }
 
 export async function getDetail(part?: string, id?: string) {
-  return fetch(`${BASE_PATH}/${part}/${id}?api_key=${API_KEY}`).then(
+  return fetch(`${BASE_PATH}/${part}/${id}?api_key=${API_KEY}&language=ko-KR`).then(
     (response) => response.json()
   );
 }
 export async function getClipDetails(part?: string, id?: string) {
   return await fetch(
-    `${BASE_PATH}/${part}/${id}/videos?api_key=${API_KEY}`
+    `${BASE_PATH}/${part}/${id}/videos?api_key=${API_KEY}&language=ko-KR`
   ).then((response) => response.json());
 }
 
 export async function getTrailer(part?: string, id?: string) {
   return await (
-    await fetch(`${BASE_PATH}/${part}/${id}/videos?api_key=${API_KEY}`)
+    await fetch(`${BASE_PATH}/${part}/${id}/videos?api_key=${API_KEY}&language=ko-KR`)
   ).json();
 }
 export async function getRecommend(part?: string, id?: string) {
   return await fetch(
-    `${BASE_PATH}/${part}/${id}/recommendations?api_key=${API_KEY}`
+    `${BASE_PATH}/${part}/${id}/recommendations?api_key=${API_KEY}&language=ko-KR`
   ).then((response) => response.json());
 }
