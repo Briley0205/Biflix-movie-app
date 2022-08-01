@@ -14,6 +14,7 @@ import {
   getRecommend,
   getTopRatedMovies,
   getUpcomingMovies,
+  nowPlaying,
 } from "../api";
 
 /**Components */
@@ -41,7 +42,6 @@ function Home() {
   }>("/:part/:sliderPart/:id");
   const part = bigModalMatch?.params.part;
   const id = bigModalMatch?.params.id;
-
   const { data: nowPlayingData, isLoading: playingLoading } =
     useQuery<IGetMoviesResult>(["nowPlaying", "movie"], getNowPlayingMovies);
   const { data: topRatedData, isLoading: topLoading } =

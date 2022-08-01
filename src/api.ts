@@ -54,6 +54,17 @@ export interface IMovieRecommendations {
   total_results: number;
 }
 
+export function HomeData(this: any, basePath: string, apiKey: string) {
+    this.basePath = basePath;
+    this.apiKey = apiKey;
+
+  this.getNowPlaying = function() {
+     console.log(`${this.basePath}/movie/now_playing?api_key=${this.apiKey}&language=ko-KR`)
+  }
+}
+export const nowPlaying = new (HomeData as any)(BASE_PATH, API_KEY);
+console.log(nowPlaying.getNowPlaying())
+
 export function getNowPlayingMovies() {
   return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR`).then(
     (response) => response.json()
@@ -77,6 +88,11 @@ export function getTvAiring() {
 }
 export function getTvTopRated() {
   return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR`).then(
+    (response) => response.json()
+  );
+}
+export function getTvPopular() {
+  return fetch(`${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR`).then(
     (response) => response.json()
   );
 }

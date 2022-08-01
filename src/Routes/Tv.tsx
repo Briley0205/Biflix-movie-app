@@ -19,6 +19,7 @@ import {
   IGetMoviesResult,
   getTvAiring,
   getTvTopRated,
+  getTvPopular
 } from "../api";
 import { useQuery } from "react-query";
 
@@ -45,11 +46,7 @@ function Tv() {
     useQuery<IGetMoviesResult>(["nowAiring", "tv"], getTvAiring);
   const { data: tvTrendingData, isLoading: trendingLoading } =
     useQuery<IGetMoviesResult>(["top", "tv"], getTvTopRated);
-
-  const { data: bannerData, isLoading: bannerLoading } =
-    useQuery<IGetMoviesResult>(["tv", "Banner"], () =>
-      getDetail("tv", id || "")
-    );
+  const { data: tvPopularData, isLoading: popularLoading} = useQuery<IGetMoviesResult>(["popular", "tv"], getTvPopular);
 
   /**Getting detail data */
   const { data: detail } = useQuery(["detail", id], () =>
@@ -87,12 +84,25 @@ function Tv() {
           ></Sliders>
         </>
       )}
+      {popularLoading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Sliders
+            id="popularData"
+            movies={tvPopularData?.results ?? []}
+            title="Popular Tv Show"
+            query="popularTvShow"
+            part="tv"
+          ></Sliders>
+        </>
+      )}
       {trendingLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
           <Sliders
-            id="trendingData"
+            id="topRatedData"
             movies={tvTrendingData?.results ?? []}
             title="Top Rated Tv Show"
             query="topRatedTvShow"
