@@ -4,13 +4,14 @@ import styled from "styled-components";
 import { ReactComponent as PiyoSvg } from "../Image/Logo-piyo.svg";
 
 /**To Route Link */
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { MotionConfig } from "framer-motion";
 
 /**For motion animation */
 import { motion, useAnimation, useViewportScroll } from "framer-motion";
 import { isWhiteSpaceLike } from "typescript";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 const Nav = styled(motion.nav)`
   height: 70px;
@@ -64,7 +65,7 @@ const NavUnderBar = styled(motion.span)`
   background-color: ${(props) => props.theme.red};
 `;
 
-const Search = styled.span`
+const Search = styled.form`
   color: white;
   display: flex;
   align-items: center;
@@ -72,6 +73,7 @@ const Search = styled.span`
   svg {
     height: 25px;
   }
+  cursor: pointer;
 `;
 const Input = styled(motion.input)`
   transform-origin: right center;
@@ -86,6 +88,10 @@ const Input = styled(motion.input)`
   caret-color: auto;
   border: 1px solid ${(props) => props.theme.white.lighter};
 `;
+
+interface IForm {
+  keyword: string;
+}
 
 const navVariants = {
   top: { backgroundColor: "rgba(20, 20, 20, 0)" },
@@ -121,6 +127,13 @@ function Header() {
       }
     });
   }, [scrollY, navAnimation]);
+  
+  const history = useHistory();
+  const {register, handleSubmit} = useForm<IForm>();
+  const onSearch = (data:IForm) => {
+    console.log(data);
+    history.push(`/search?keyword=${data.keyword}`)
+  }
   return (
     <Nav variants={navVariants} animate={navAnimation} initial="top">
       <Col>
@@ -157,8 +170,9 @@ function Header() {
         </Items>
       </Col>
       <Col>
-        <Search>
+        <Search onSubmit={handleSubmit(onSearch)}>
           <Input
+          {...register("keyword", {required: true, minLength: 2})}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}

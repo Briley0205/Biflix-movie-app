@@ -66,33 +66,33 @@ export const nowPlaying = new (HomeData as any)(BASE_PATH, API_KEY);
 console.log(nowPlaying.getNowPlaying())
 
 export function getNowPlayingMovies() {
-  return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR`).then(
+  return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
     (response) => response.json()
   );
 }
 export function getTopRatedMovies() {
-  return fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko-KR`).then(
+  return fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
     (response) => response.json()
   );
 }
 export function getUpcomingMovies() {
-  return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko-KR`).then(
+  return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
     (response) => response.json()
   );
 }
 
 export function getTvAiring() {
-  return fetch(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko-KR`).then(
+  return fetch(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
     (response) => response.json()
   );
 }
 export function getTvTopRated() {
-  return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR`).then(
+  return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
     (response) => response.json()
   );
 }
 export function getTvPopular() {
-  return fetch(`${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR`).then(
+  return fetch(`${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
     (response) => response.json()
   );
 }
