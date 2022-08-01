@@ -1,4 +1,4 @@
-## ❣ Biflix-movie-app TIL 🧐
+## ❣ Biflix-movie-app 회고록 🧐
 
 ### Netflix Clone with ReactJS
 

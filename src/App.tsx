@@ -1,5 +1,6 @@
 /**For router */
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+//import { Route, HashRouter as Router, Switch } from "react-router-dom";
 
 /**Get some screens */
 import Home from "./Routes/Home";
@@ -20,7 +21,7 @@ function App() {
       : (document.body.style.overflowY = "scroll");
   }, [isModalActive]);
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={"/Biflix-movie-app"}>
       <Header />
       <Switch>
         <Route path="/search">
