@@ -99,13 +99,13 @@ export function getTvPopular() {
 
 export function findMovies(keyword: string | null) {
   return fetch(
-    `${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${keyword}`
+    `${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${keyword}&language=ko-KR&region=kr`
   ).then((response) => response.json());
 }
 
 export function findTvShows(keyword: string | null) {
   return fetch(
-    `${BASE_PATH}/search/tv?api_key=${API_KEY}&query=${keyword}`
+    `${BASE_PATH}/search/tv?api_key=${API_KEY}&query=${keyword}&language=ko-KR&region=kr`
   ).then((response) => response.json());
 }
 

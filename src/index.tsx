@@ -75,7 +75,7 @@ body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
   color: white;
-  background-color: whitesmoke;
+  background-color: #141414;
   line-height: 1.2;
 }
 a {
