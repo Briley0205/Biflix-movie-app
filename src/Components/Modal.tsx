@@ -27,7 +27,7 @@ const ModalContainer = styled(motion.div)`
 const ModalDialog = styled(motion.article)`
   position: relative;
   margin: 1.5rem auto;
-  max-width: 1028px;
+  max-width: 901.26px;
   width: 100%;
   height: calc(100vh - 3rem);
   box-shadow: rgb(0 0 0 / 75%) 0px 3px 10px;
@@ -49,7 +49,7 @@ const Overlay = styled(motion.div)`
 `;
 const ModalHeader = styled.div<{ bgPhoto?: string }>`
   width: 100%;
-  height: calc((100vh - 48px) * (4 / 5));
+  height: calc((100vh - 48px) * (3 / 5));
   object-fit: cover;
   background-image: linear-gradient(0deg, #181818, transparent 50%),
     url(${(props) => props.bgPhoto});

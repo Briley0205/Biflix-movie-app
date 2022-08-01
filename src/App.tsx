@@ -21,7 +21,7 @@ function App() {
       : (document.body.style.overflowY = "scroll");
   }, [isModalActive]);
   return (
-    <BrowserRouter basename={"/Biflix-movie-app"}>
+    <BrowserRouter basename={"https://Briley0205.github.io/Biflix-movie-app"}>
       <Header />
       <Switch>
         <Route path="/search">
