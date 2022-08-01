@@ -130,13 +130,27 @@ function Header() {
         <Items>
           <Item>
             <Link to="/">
-              <span style={{color: homeMatch?.isExact ? "#E51013" : "white", fontWeight: homeMatch?.isExact ? "600" : "400"}}>Home</span>
+              <span
+                style={{
+                  color: homeMatch?.isExact ? "#E51013" : "white",
+                  fontWeight: homeMatch?.isExact ? "600" : "400",
+                }}
+              >
+                Home
+              </span>
               {homeMatch?.isExact && <NavUnderBar layoutId="nav" />}
             </Link>
           </Item>
           <Item>
             <Link to="/tv">
-              <span style={{color: tvMatch?.isExact ? "#E51013" : "white", fontWeight: tvMatch?.isExact ? "600" : "400"}}>Tv Shows</span>
+              <span
+                style={{
+                  color: tvMatch?.isExact ? "#E51013" : "white",
+                  fontWeight: tvMatch?.isExact ? "600" : "400",
+                }}
+              >
+                Tv Shows
+              </span>
               {tvMatch?.isExact && <NavUnderBar layoutId="nav" />}
             </Link>
           </Item>

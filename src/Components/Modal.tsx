@@ -27,7 +27,7 @@ const ModalContainer = styled(motion.div)`
 const ModalDialog = styled(motion.article)`
   position: relative;
   margin: 1.5rem auto;
-  max-width: 901.26px;
+  max-width: 1028px;
   width: 100%;
   height: calc(100vh - 3rem);
   box-shadow: rgb(0 0 0 / 75%) 0px 3px 10px;
