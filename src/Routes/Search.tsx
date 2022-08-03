@@ -13,7 +13,7 @@ import Modal from "../Components/Modal";
 import Sliders from "../Components/Sliders";
 
 const Wrapper = styled.div`
-  margin-top: 300px;
+  padding-top: 300px;
   width: 100%;
   overflow-x: hidden;
 `;
