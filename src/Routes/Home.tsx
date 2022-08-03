@@ -14,7 +14,6 @@ import {
   getRecommend,
   getTopRatedMovies,
   getUpcomingMovies,
-  nowPlaying,
 } from "../api";
 
 /**Components */
