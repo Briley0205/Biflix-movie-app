@@ -19,7 +19,7 @@ import {
   IGetMoviesResult,
   getTvAiring,
   getTvTopRated,
-  getTvPopular
+  getTvPopular,
 } from "../api";
 import { useQuery } from "react-query";
 
@@ -46,7 +46,8 @@ function Tv() {
     useQuery<IGetMoviesResult>(["nowAiring", "tv"], getTvAiring);
   const { data: tvTrendingData, isLoading: trendingLoading } =
     useQuery<IGetMoviesResult>(["top", "tv"], getTvTopRated);
-  const { data: tvPopularData, isLoading: popularLoading} = useQuery<IGetMoviesResult>(["popular", "tv"], getTvPopular);
+  const { data: tvPopularData, isLoading: popularLoading } =
+    useQuery<IGetMoviesResult>(["popular", "tv"], getTvPopular);
 
   /**Getting detail data */
   const { data: detail } = useQuery(["detail", id], () =>
@@ -59,7 +60,6 @@ function Tv() {
     getRecommend(part, id || "")
   );
   const clips = getClips?.results?.reverse().slice(0, 3);
-  console.log(nowAiringData);
   return (
     <Wrapper>
       <Helmet>

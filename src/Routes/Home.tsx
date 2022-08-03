@@ -9,12 +9,10 @@ import {
   getNowPlayingMovies,
   IGetMoviesResult,
   getDetail,
-  IMovie,
   getClipDetails,
   getRecommend,
   getTopRatedMovies,
   getUpcomingMovies,
-  nowPlaying,
 } from "../api";
 
 /**Components */
