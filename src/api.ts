@@ -54,47 +54,36 @@ export interface IMovieRecommendations {
   total_results: number;
 }
 
-export function HomeData(this: any, basePath: string, apiKey: string) {
-    this.basePath = basePath;
-    this.apiKey = apiKey;
-
-  this.getNowPlaying = function() {
-     console.log(`${this.basePath}/movie/now_playing?api_key=${this.apiKey}&language=ko-KR`)
-  }
-}
-export const nowPlaying = new (HomeData as any)(BASE_PATH, API_KEY);
-console.log(nowPlaying.getNowPlaying())
-
 export function getNowPlayingMovies() {
-  return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
-    (response) => response.json()
-  );
+  return fetch(
+    `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&region=kr`
+  ).then((response) => response.json());
 }
 export function getTopRatedMovies() {
-  return fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
-    (response) => response.json()
-  );
+  return fetch(
+    `${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko-KR&region=kr`
+  ).then((response) => response.json());
 }
 export function getUpcomingMovies() {
-  return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
-    (response) => response.json()
-  );
+  return fetch(
+    `${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko-KR&region=kr`
+  ).then((response) => response.json());
 }
 
 export function getTvAiring() {
-  return fetch(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
-    (response) => response.json()
-  );
+  return fetch(
+    `${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko-KR&region=kr`
+  ).then((response) => response.json());
 }
 export function getTvTopRated() {
-  return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
-    (response) => response.json()
-  );
+  return fetch(
+    `${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR&region=kr`
+  ).then((response) => response.json());
 }
 export function getTvPopular() {
-  return fetch(`${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR&region=kr`).then(
-    (response) => response.json()
-  );
+  return fetch(
+    `${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR&region=kr`
+  ).then((response) => response.json());
 }
 
 export function findMovies(keyword: string | null) {
@@ -110,9 +99,9 @@ export function findTvShows(keyword: string | null) {
 }
 
 export async function getDetail(part?: string, id?: string) {
-  return fetch(`${BASE_PATH}/${part}/${id}?api_key=${API_KEY}&language=ko-KR`).then(
-    (response) => response.json()
-  );
+  return fetch(
+    `${BASE_PATH}/${part}/${id}?api_key=${API_KEY}&language=ko-KR`
+  ).then((response) => response.json());
 }
 export async function getClipDetails(part?: string, id?: string) {
   return await fetch(
@@ -122,7 +111,9 @@ export async function getClipDetails(part?: string, id?: string) {
 
 export async function getTrailer(part?: string, id?: string) {
   return await (
-    await fetch(`${BASE_PATH}/${part}/${id}/videos?api_key=${API_KEY}&language=ko-KR`)
+    await fetch(
+      `${BASE_PATH}/${part}/${id}/videos?api_key=${API_KEY}&language=ko-KR`
+    )
   ).json();
 }
 export async function getRecommend(part?: string, id?: string) {

@@ -9,7 +9,6 @@ import {
   getNowPlayingMovies,
   IGetMoviesResult,
   getDetail,
-  IMovie,
   getClipDetails,
   getRecommend,
   getTopRatedMovies,
