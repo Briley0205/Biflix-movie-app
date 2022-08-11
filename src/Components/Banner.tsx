@@ -27,7 +27,7 @@ const TitleLayer = styled.div`
 `;
 const TitleWrapper = styled.div``;
 const BillBoardTitle = styled.div`
-  min-height: 6.5vw;
+  min-height: 4.5vw;
   max-width: 85%;
   margin-bottom: 1.2vw;
   font-size: 2.5vw;
@@ -38,6 +38,11 @@ const InfoWrapper = styled.div`
   width: 100%;
   font-size: 1.2vw;
   text-shadow: 2px 2px 4px rgb(0 0 0 / 45%);
+`;
+const InnerInfo = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
 `;
 const TitleButtonWrapper = styled.div`
   display: flex;
@@ -65,14 +70,14 @@ const TitlePlayButton = styled(motion.button)`
   font-size: 1vw;
   font-weight: 600;
   &:hover {
-    background-color: rgba(255,255,255,0.75);
+    background-color: rgba(255, 255, 255, 0.75);
   }
 `;
 const TitleInfoButton = styled(TitlePlayButton)`
   background-color: rgba(109, 109, 110, 0.7);
   color: white;
   &:hover {
-    background-color: rgba(109,109,110,0.4);
+    background-color: rgba(109, 109, 110, 0.4);
   }
 `;
 const ButtonIcon = styled.div`
@@ -91,6 +96,7 @@ const Banner = ({ id, part, movies }: IBanner) => {
   useEffect(() => {
     if (movies) setMovie(movies[0]);
   }, [movies]);
+  console.log(movie);
   const [isModalActive, setIsActive] = useRecoilState(modalState);
   const history = useHistory();
   const onBoxClicked = (part: string, id: number, sliderId: string) => {
@@ -107,7 +113,23 @@ const Banner = ({ id, part, movies }: IBanner) => {
                 {part === "movie" ? movie?.title : movie?.name}
               </BillBoardTitle>
             </TitleWrapper>
-            <InfoWrapper>{movie?.overview}</InfoWrapper>
+            <InfoWrapper>
+              <InnerInfo>
+                <div
+                  style={{
+                    fontWeight: "600",
+                    color: "rgb(70, 211, 105)",
+                    marginRight: "0.5em",
+                  }}
+                >
+                  {movie?.release_date}
+                </div>
+                <div style={{ fontWeight: "500", marginRight: "0.5em" }}>
+                  {movie?.vote_average}
+                </div>
+              </InnerInfo>
+              {movie?.overview}
+            </InfoWrapper>
             <TitleButtonWrapper>
               <TitlePlayButton onClick={() => onBoxClicked(part, movie.id, id)}>
                 <ButtonIcon>
