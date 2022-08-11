@@ -5,12 +5,11 @@ import { ReactComponent as PiyoSvg } from "../Image/Logo-piyo.svg";
 
 /**To Route Link */
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
-import { MotionConfig } from "framer-motion";
+import { useTransform } from "framer-motion";
 
 /**For motion animation */
 import { motion, useAnimation, useViewportScroll } from "framer-motion";
-import { isWhiteSpaceLike } from "typescript";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Nav = styled(motion.nav)`
@@ -56,14 +55,6 @@ const Item = styled.li`
     }
   }
 `;
-const NavUnderBar = styled(motion.span)`
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  bottom: 0;
-  border-radius: 2px;
-  background-color: ${(props) => props.theme.red};
-`;
 
 const Search = styled.form`
   color: white;
@@ -93,10 +84,6 @@ interface IForm {
   keyword: string;
 }
 
-const navVariants = {
-  top: { backgroundColor: "rgba(20, 20, 20, 0)" },
-  scroll: { backgroundColor: "rgba(20, 20, 20, 1)" },
-};
 function Header() {
   /**It wil tell if I am in the url */
   const homeMatch = useRouteMatch("/");
@@ -116,26 +103,23 @@ function Header() {
     }
     setSearchOpen((prev) => !prev);
   };
-  const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
-  useEffect(() => {
-    scrollY.onChange(() => {
-      if (scrollY.get() > 60) {
-        navAnimation.start("scroll");
-      } else {
-        navAnimation.start("top");
-      }
-    });
-  }, [scrollY, navAnimation]);
-  
+  const gradientColor = useTransform(
+    scrollY,
+    [0, 150],
+    [
+      "linear-gradient(rgb(20, 20, 20), rgba(20, 20, 20, 0.04))",
+      "linear-gradient(rgb(0, 0, 0), rgb(7, 7, 7))",
+    ]
+  );
+
   const history = useHistory();
-  const {register, handleSubmit} = useForm<IForm>();
-  const onSearch = (data:IForm) => {
-    console.log(data);
-    history.push(`/search?keyword=${data.keyword}`)
-  }
+  const { register, handleSubmit } = useForm<IForm>();
+  const onSearch = (data: IForm) => {
+    history.push(`/search?keyword=${data.keyword}`);
+  };
   return (
-    <Nav variants={navVariants} animate={navAnimation} initial="top">
+    <Nav style={{ background: gradientColor }}>
       <Col>
         <LogoBox>
           <PiyoSvg />
@@ -151,7 +135,6 @@ function Header() {
               >
                 Home
               </span>
-              {homeMatch?.isExact && <NavUnderBar layoutId="nav" />}
             </Link>
           </Item>
           <Item>
@@ -164,7 +147,6 @@ function Header() {
               >
                 Tv Shows
               </span>
-              {tvMatch?.isExact && <NavUnderBar layoutId="nav" />}
             </Link>
           </Item>
         </Items>
@@ -172,7 +154,7 @@ function Header() {
       <Col>
         <Search onSubmit={handleSubmit(onSearch)}>
           <Input
-          {...register("keyword", {required: true, minLength: 2})}
+            {...register("keyword", { required: true, minLength: 2 })}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}
