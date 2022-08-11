@@ -96,7 +96,6 @@ const Banner = ({ id, part, movies }: IBanner) => {
   useEffect(() => {
     if (movies) setMovie(movies[0]);
   }, [movies]);
-  console.log(movie);
   const [isModalActive, setIsActive] = useRecoilState(modalState);
   const history = useHistory();
   const onBoxClicked = (part: string, id: number, sliderId: string) => {

@@ -197,7 +197,6 @@ interface IModalData {
 }
 
 function Modal({ movieDetail, movieClips, movieRecomendations }: IModalData) {
-  //console.log(movieDetail, movieClips, movieRecomendations);
   const bigModalMatch = useRouteMatch<{
     part: string;
     sliderPart: string;
