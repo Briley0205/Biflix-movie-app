@@ -91,7 +91,7 @@ const ArrowBox = styled(motion.span)`
   background: rgba(20, 20, 20, 0.5);
   border-radius: 0 5px 5px 0;
   svg {
-    color: rgba(255, 255, 255, 0.5); 
+    color: rgba(255, 255, 255, 0.5);
     transition: all 0.1s ease;
     opacity: 0;
   }
@@ -159,7 +159,6 @@ const Sliders = ({ id, title, movies, part }: IData) => {
       setSliderMovingPrev(true);
       setSliderMoving(true);
       setIndex((prev) => (prev === maxIndex ? prev - 1 : 0));
-      console.log(index);
     }
   };
   const onExitCompleteSlider = () => {

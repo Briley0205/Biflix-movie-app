@@ -54,7 +54,6 @@ const TrailerVideo = ({ part, id }: IGetTrailer) => {
         trailer[Math.ceil(Math.random() * (trailer.length - 1))];
       const videoKey = randomVideo?.key;
       setVideoKey(videoKey);
-      console.log(videoKey);
     })();
   }, [id]);
   return (
