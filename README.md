@@ -14,7 +14,7 @@
 추천 동영상 정보를 끌어와 영상 리스트로 표현한 작은 앱 입니다.</br>
 
 <p>
-  <img src="./read_src/read_img/대형사진.png">
+  <img src="./read_src/read_img/intro.png" width="600">
 </p>
 
 ### 사용 기술
