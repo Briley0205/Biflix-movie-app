@@ -43,4 +43,4 @@
 모달이 열리는 것을 트리거로, api요청을 보내어,</br>
 받아온 비디오 주소를 프론트에 반영하고, 자동 재생시키도록 만들었습니다.
 
-</details>
+<img src="./read_src/read_img/trailer.gif" width="600">
