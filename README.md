@@ -2,8 +2,6 @@
 
 ### Netflix Clone with ReactJS
 
-❗아직 작업 중....✒
-
 - 사용 기술
 - 기능
 
