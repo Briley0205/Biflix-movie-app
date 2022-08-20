@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/Biflix-movie-app/static/js/main.19b2e1dd.js",
+    "main.js": "/Biflix-movie-app/static/js/main.596d1ddf.js",
     "static/media/Logo-piyo.svg": "/Biflix-movie-app/static/media/Logo-piyo.c6dd5c05b974f7f97dd733458d81782b.svg",
     "index.html": "/Biflix-movie-app/index.html",
-    "main.19b2e1dd.js.map": "/Biflix-movie-app/static/js/main.19b2e1dd.js.map"
+    "main.596d1ddf.js.map": "/Biflix-movie-app/static/js/main.596d1ddf.js.map"
   },
   "entrypoints": [
-    "static/js/main.19b2e1dd.js"
+    "static/js/main.596d1ddf.js"
   ]
 }
