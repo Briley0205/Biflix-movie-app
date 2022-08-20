@@ -24,6 +24,7 @@ import { useRouteMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
   overflow-x: hidden;
+  background-color: #141414;
 `;
 const Loader = styled.div`
   display: flex;
@@ -33,9 +34,7 @@ const Loader = styled.div`
 const SliderWrapper = styled.div`
   position: relative;
   top: -15vw;
-  display: inline-block;
   min-width: 840px;
-  width: auto;
 `;
 
 function Home() {

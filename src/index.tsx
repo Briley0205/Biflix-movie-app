@@ -77,7 +77,6 @@ body {
   color: white;
   background-color: #141414;
   line-height: 1.2;
-  display: inline-block;
   min-width: 840px;
 }
 a {

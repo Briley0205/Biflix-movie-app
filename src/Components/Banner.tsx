@@ -10,6 +10,7 @@ import { makeImagePath } from "../utils";
 
 const Mainhome = styled.div<{ bgPhoto: string }>`
   height: 56.25vw;
+  min-height: 350px;
   display: flex;
   flex-direction: column;
   justify-content: center;

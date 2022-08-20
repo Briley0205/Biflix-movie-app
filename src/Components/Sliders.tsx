@@ -18,6 +18,7 @@ const SliderWrapper = styled.div`
   }
   width: 100%;
   display: inline-block;
+  min-height: 200px;
 `;
 const SliderTitle = styled.h2`
   line-height: 1.3;
@@ -34,6 +35,7 @@ const Row = styled(motion.div)`
   margin-bottom: 5px;
   grid-template-columns: repeat(6, 1fr);
   padding: 0 4%;
+  position: absolute;
 `;
 const rowVariants = {
   hidden: ({ prev }: { prev: boolean }) => ({
