@@ -14,7 +14,7 @@ import { useRecoilState } from "recoil";
 import { modalState } from "./atom";
 
 function App() {
-  const [isModalActive, setIsActive] = useRecoilState(modalState);
+  const [isModalActive] = useRecoilState(modalState);
   useEffect(() => {
     isModalActive
       ? (document.body.style.overflowY = "hidden")

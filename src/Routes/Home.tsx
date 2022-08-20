@@ -17,19 +17,25 @@ import {
 
 /**Components */
 import Banner from "../Components/Banner";
-import Sliders from "../Components/Sliders";
+import Slider from "../Components/Sliders";
 import Modal from "../Components/Modal";
 
 import { useRouteMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
-  background-color: #141414;
   overflow-x: hidden;
 `;
 const Loader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+const SliderWrapper = styled.div`
+  position: relative;
+  top: -15vw;
+  display: inline-block;
+  min-width: 840px;
+  width: auto;
 `;
 
 function Home() {
@@ -56,6 +62,8 @@ function Home() {
   const { data: movieRecomendations } = useQuery(["movieRecommend", id], () =>
     getRecommend(part, id || "")
   );
+  const isLoading = playingLoading || topLoading || upcomeLoading || false;
+
   const clips = movieClips?.results?.reverse().slice(0, 3);
   return (
     <Wrapper>
@@ -63,7 +71,7 @@ function Home() {
         <title>Home | BIFLIX</title>
         <link rel="icon" href="../image/Logo-piyo.svg" />
       </Helmet>
-      {playingLoading ? (
+      {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
@@ -72,39 +80,29 @@ function Home() {
             part="movie"
             movies={nowPlayingData?.results}
           ></Banner>
-          <Sliders
-            id="nowPlayingData"
-            movies={nowPlayingData?.results ?? []}
-            title="Now Playing"
-            query="nowPlayingMovies"
-            part="movie"
-          ></Sliders>
-        </>
-      )}
-      {upcomeLoading ? (
-        <Loader>Loading...</Loader>
-      ) : (
-        <>
-          <Sliders
-            id="upcomingData"
-            movies={upcomingData?.results ?? []}
-            title="UP Coming Movie"
-            query="upcomingData"
-            part="movie"
-          ></Sliders>
-        </>
-      )}
-      {topLoading ? (
-        <Loader>Loading...</Loader>
-      ) : (
-        <>
-          <Sliders
-            id="topratedData"
-            movies={topRatedData?.results ?? []}
-            title="TOP Rated"
-            query="topratedData"
-            part="movie"
-          ></Sliders>
+          <SliderWrapper>
+            <Slider
+              id="nowPlayingData"
+              movies={nowPlayingData?.results ?? []}
+              title="Now Playing"
+              query="nowPlayingMovies"
+              part="movie"
+            ></Slider>
+            <Slider
+              id="upcomingData"
+              movies={upcomingData?.results ?? []}
+              title="UP Coming Movie"
+              query="upcomingData"
+              part="movie"
+            ></Slider>
+            <Slider
+              id="topratedData"
+              movies={topRatedData?.results ?? []}
+              title="TOP Rated"
+              query="topratedData"
+              part="movie"
+            ></Slider>
+          </SliderWrapper>
         </>
       )}
       <Modal

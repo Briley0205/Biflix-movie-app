@@ -10,10 +10,10 @@ import {
   IGetMoviesResult,
 } from "../api";
 import Modal from "../Components/Modal";
-import Sliders from "../Components/Sliders";
+import Slider from "../Components/Sliders";
 
 const Wrapper = styled.div`
-  padding-top: 300px;
+  padding-top: 100px;
   width: 100%;
   overflow-x: hidden;
 `;
@@ -44,34 +44,27 @@ function Search() {
     getRecommend(part, id || "")
   );
   const clips = movieClips?.results?.reverse().slice(0, 3);
+  const isLoading = isMovieLoading || isTvLoading || false;
   return (
     <Wrapper>
       {keyword ? (
         <>
-          {isMovieLoading ? null : (
+          {isLoading ? null : (
             <>
-              <Sliders
+              <Slider
                 id="searchMovie"
                 movies={movies?.results ?? []}
                 title="Search Movie"
                 query="searchMovie"
                 part="movie"
-              ></Sliders>
-            </>
-          )}
-        </>
-      ) : null}
-      {keyword ? (
-        <>
-          {isTvLoading ? null : (
-            <>
-              <Sliders
+              ></Slider>
+              <Slider
                 id="searchTvShow"
                 movies={tvShows?.results ?? []}
                 title="Search Tv Show"
                 query="searchTvShow"
                 part="tv"
-              ></Sliders>
+              ></Slider>
             </>
           )}
         </>

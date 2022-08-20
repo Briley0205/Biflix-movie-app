@@ -8,15 +8,16 @@ import { useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
 
-const Slider = styled.div`
+const SliderWrapper = styled.div`
   position: relative;
-  top: -15vw;
   margin: 3vw 0;
   height: 25vw;
   padding: 0;
   &:hover svg {
     opacity: 1;
   }
+  width: 100%;
+  display: inline-block;
 `;
 const SliderTitle = styled.h2`
   line-height: 1.3;
@@ -32,7 +33,6 @@ const Row = styled(motion.div)`
   gap: 10px;
   margin-bottom: 5px;
   grid-template-columns: repeat(6, 1fr);
-  position: absolute;
   padding: 0 4%;
 `;
 const rowVariants = {
@@ -140,7 +140,7 @@ interface IData {
   part: string;
 }
 
-const Sliders = ({ id, title, movies, part }: IData) => {
+const Slider = ({ id, title, movies, part }: IData) => {
   const [index, setIndex] = useState(0);
   const [sliderMoving, setSliderMoving] = useState(false);
   const [sliderMovingPrev, setSliderMovingPrev] = useState(false);
@@ -172,7 +172,7 @@ const Sliders = ({ id, title, movies, part }: IData) => {
     setIsActive(true);
   };
   return (
-    <Slider>
+    <SliderWrapper>
       <SliderTitle>{title}</SliderTitle>
       {index === 0 ? null : (
         <ArrowBox onClick={decreaseIndex}>
@@ -220,8 +220,8 @@ const Sliders = ({ id, title, movies, part }: IData) => {
       <RightArrow onClick={increaseIndex}>
         <MdKeyboardArrowRight size="3vw" />
       </RightArrow>
-    </Slider>
+    </SliderWrapper>
   );
 };
 
-export default Sliders;
+export default Slider;

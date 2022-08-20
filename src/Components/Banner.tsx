@@ -22,6 +22,7 @@ const Mainhome = styled.div<{ bgPhoto: string }>`
     url(${(props) => props.bgPhoto});
   background-size: cover;
 `;
+
 const TitleLayer = styled.div`
   width: 36%;
 `;
@@ -34,7 +35,7 @@ const BillBoardTitle = styled.div`
   font-weight: 500;
 `;
 const InfoWrapper = styled.div`
-  margin-bottom: 36px;
+  margin-bottom: 2vw;
   width: 100%;
   font-size: 1.2vw;
   text-shadow: 2px 2px 4px rgb(0 0 0 / 45%);
@@ -42,7 +43,7 @@ const InfoWrapper = styled.div`
 const InnerInfo = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 1vw;
 `;
 const TitleButtonWrapper = styled.div`
   display: flex;

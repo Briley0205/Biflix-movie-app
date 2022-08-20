@@ -7,7 +7,7 @@ import { useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 
 /**Components */
-import Sliders from "../Components/Sliders";
+import Slider from "../Components/Sliders";
 import Modal from "../Components/Modal";
 import Banner from "../Components/Banner";
 
@@ -24,13 +24,19 @@ import {
 import { useQuery } from "react-query";
 
 const Wrapper = styled.div`
-  background-color: #141414;
   overflow-x: hidden;
 `;
 const Loader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+const SliderWrapper = styled.div`
+  position: relative;
+  top: -15vw;
+  display: inline-block;
+  min-width: 840px;
+  width: auto;
 `;
 
 function Tv() {
@@ -59,6 +65,8 @@ function Tv() {
   const { data: recomendations } = useQuery(["recommend", id], () =>
     getRecommend(part, id || "")
   );
+  const isLoading =
+    pairingLoading || trendingLoading || popularLoading || false;
   const clips = getClips?.results?.reverse().slice(0, 3);
   return (
     <Wrapper>
@@ -66,7 +74,7 @@ function Tv() {
         <title>Tv Show | BIFLIX</title>
         <link rel="icon" href="../image/Logo-piyo.svg" />
       </Helmet>
-      {pairingLoading ? (
+      {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
@@ -75,39 +83,29 @@ function Tv() {
             part="tv"
             movies={nowAiringData?.results}
           ></Banner>
-          <Sliders
-            id="nowAiringData"
-            movies={nowAiringData?.results ?? []}
-            title="Now On Air"
-            query="nowPlayingShow"
-            part="tv"
-          ></Sliders>
-        </>
-      )}
-      {popularLoading ? (
-        <Loader>Loading...</Loader>
-      ) : (
-        <>
-          <Sliders
-            id="popularData"
-            movies={tvPopularData?.results ?? []}
-            title="Popular Tv Show"
-            query="popularTvShow"
-            part="tv"
-          ></Sliders>
-        </>
-      )}
-      {trendingLoading ? (
-        <Loader>Loading...</Loader>
-      ) : (
-        <>
-          <Sliders
-            id="topRatedData"
-            movies={tvTrendingData?.results ?? []}
-            title="Top Rated Tv Show"
-            query="topRatedTvShow"
-            part="tv"
-          ></Sliders>
+          <SliderWrapper>
+            <Slider
+              id="nowAiringData"
+              movies={nowAiringData?.results ?? []}
+              title="Now On Air"
+              query="nowPlayingShow"
+              part="tv"
+            ></Slider>
+            <Slider
+              id="popularData"
+              movies={tvPopularData?.results ?? []}
+              title="Popular Tv Show"
+              query="popularTvShow"
+              part="tv"
+            ></Slider>
+            <Slider
+              id="topRatedData"
+              movies={tvTrendingData?.results ?? []}
+              title="Top Rated Tv Show"
+              query="topRatedTvShow"
+              part="tv"
+            ></Slider>
+          </SliderWrapper>
         </>
       )}
       <Modal
