@@ -66,7 +66,7 @@ function Tv() {
   );
   const isLoading =
     pairingLoading || trendingLoading || popularLoading || false;
-  const clips = getClips?.results?.reverse().slice(0, 3);
+  const clips = getClips?.results?.slice(-3).reverse();
   return (
     <Wrapper>
       <Helmet>
