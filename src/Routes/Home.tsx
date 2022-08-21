@@ -63,7 +63,7 @@ function Home() {
   );
   const isLoading = playingLoading || topLoading || upcomeLoading || false;
 
-  const clips = movieClips?.results?.reverse().slice(0, 3);
+  const clips = movieClips?.results?.slice(-3).reverse();
   return (
     <Wrapper>
       <Helmet>
